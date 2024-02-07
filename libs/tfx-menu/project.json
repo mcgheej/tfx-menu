@@ -1,0 +1,9 @@
+{
+  "name": "tfx-menu",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/tfx-menu/src",
+  "prefix": "tfx",
+  "tags": [],
+  "projectType": "library",
+  "targets": {}
+}
