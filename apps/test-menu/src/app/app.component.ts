@@ -1,13 +1,28 @@
+import { JsonPipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { AppMenuComponent, AppMenuConfig } from '@tfx-menu/tfx-menu';
 
 @Component({
   standalone: true,
-  imports: [NxWelcomeComponent],
+  imports: [JsonPipe, AppMenuComponent],
   selector: 'tfx-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'test-menu';
+
+  appMenu: AppMenuConfig = {
+    topLevelItems: [
+      {
+        label: 'File',
+      },
+      {
+        label: 'Edit',
+      },
+      {
+        label: 'Help',
+      },
+    ],
+  };
 }

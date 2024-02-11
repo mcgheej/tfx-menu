@@ -1,20 +1,14 @@
-// Export configuration data types for menu items and sub-menu
-// groups
-
 export {
+  AppMenuConfig,
   CheckboxItemConfig,
   CommandItemConfig,
+  ContextMenuConfig,
+  MenuOptions,
   SubMenuChildItemConfig,
+  SubMenuConfig,
   SubMenuGroupConfig,
   SubMenuItemConfig,
   TopLevelItemConfig,
-} from './lib/types/menu-items/config-files';
+} from './lib/types';
 
-// Export configuration data types for menus
-
-export {
-  AppMenuConfig,
-  ContextMenuConfig,
-  MenuOptions,
-  SubMenuConfig,
-} from './lib/types/menus/config-files';
+export * from './lib/app-menu/app-menu.component';
