@@ -1,6 +1,17 @@
 import { Signal } from '@angular/core';
 
 /**
+ * Usage: type Derived = PartPartial<SourceType, 'prop1' | 'prop2'>
+ * This will derive a type from SourceType where all properties other
+ * than 'prop1' and 'prop2' optional.
+ */
+export type PartPartial<T, K extends keyof T> = {
+  [X in Exclude<keyof T, K>]?: T[X];
+} & {
+  [P in K]-?: T[P];
+};
+
+/**
  * MenuCategory
  * ============
  *
@@ -68,7 +79,7 @@ export interface AppMenuProps {
   type: 'appMenu';
 }
 
-export type AppMenuConfig = Partial<Omit<AppMenuProps, 'type'>>;
+export type AppMenuConfig = PartPartial<AppMenuProps, 'type'>;
 
 /**
  * ContextMenuProps
@@ -93,7 +104,7 @@ export interface ContextMenuProps {
   type: 'contextMenu';
 }
 
-export type ContextMenuConfig = Partial<Omit<ContextMenuProps, 'type'>>;
+export type ContextMenuConfig = PartPartial<ContextMenuProps, 'type'>;
 
 /**
  * SubMenuProps
@@ -117,7 +128,7 @@ export interface SubMenuProps {
   type: 'subMenu';
 }
 
-export type SubMenuConfig = Partial<Omit<SubMenuProps, 'type'>>;
+export type SubMenuConfig = PartPartial<SubMenuProps, 'type'>;
 
 /**
  * CheckboxItemProps
@@ -194,8 +205,8 @@ export interface SubMenuItemProps {
   label: string;
   disabled: Signal<boolean>;
   visible: Signal<boolean>;
-  subMenu: SubMenuGroupConfig;
   type: 'subMenuItem';
+  subMenu: SubMenuConfig;
 }
 
 /**
@@ -218,13 +229,13 @@ export interface TopLevelItemProps {
   label: string;
   disabled: Signal<boolean>;
   visible: Signal<boolean>;
-  subMenu: SubMenuGroupConfig;
   type: 'topLevelItem';
+  subMenu: SubMenuConfig;
 }
 
-export type CheckboxItemConfig = Partial<Omit<CheckboxItemProps, 'type'>>;
+export type CheckboxItemConfig = PartPartial<CheckboxItemProps, 'type'>;
 
-export type CommandItemConfig = Partial<Omit<CommandItemProps, 'type'>>;
+export type CommandItemConfig = PartPartial<CommandItemProps, 'type'>;
 
 export type SubMenuChildItemConfig =
   | CommandItemConfig
@@ -233,6 +244,6 @@ export type SubMenuChildItemConfig =
 
 export type SubMenuGroupConfig = SubMenuChildItemConfig[];
 
-export type SubMenuItemConfig = Partial<Omit<SubMenuItemProps, 'type'>>;
+export type SubMenuItemConfig = PartPartial<SubMenuItemProps, 'type'>;
 
-export type TopLevelItemConfig = Partial<Omit<TopLevelItemProps, 'type'>>;
+export type TopLevelItemConfig = PartPartial<TopLevelItemProps, 'type'>;

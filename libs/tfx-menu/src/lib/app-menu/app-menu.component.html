@@ -1,3 +1,8 @@
-<pre>
+<div class="app-menu" [ngStyle]="getAppMenuStyles()">
+  @for (item of menu.topLevelItems; track item.id) {
+  <div>{{ item.label }}</div>
+  }
+</div>
+<!-- <pre>
   <div>{{ menu | json }}</div>
-</pre>
+</pre> -->

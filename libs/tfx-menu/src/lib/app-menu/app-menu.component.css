@@ -1,0 +1,5 @@
+.app-menu {
+  height: 100%;
+  overflow: hidden;
+  z-index: 2000;
+}
