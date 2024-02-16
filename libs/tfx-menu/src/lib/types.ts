@@ -1,15 +1,5 @@
-import { Signal } from '@angular/core';
-
-/**
- * Usage: type Derived = PartPartial<SourceType, 'prop1' | 'prop2'>
- * This will derive a type from SourceType where all properties other
- * than 'prop1' and 'prop2' optional.
- */
-export type PartPartial<T, K extends keyof T> = {
-  [X in Exclude<keyof T, K>]?: T[X];
-} & {
-  [P in K]-?: T[P];
-};
+import { Observable } from 'rxjs';
+import { PartPartial } from './utils/part-partial.type';
 
 /**
  * MenuCategory
@@ -53,12 +43,12 @@ export interface MenuOptionsProps {
   outlinedIcons: boolean;
 }
 
-export type MenuOptions = Partial<MenuOptionsProps>;
+export type MenuOptionsConfig = Partial<MenuOptionsProps>;
 
 /**
  * AppMenuProps
  * ============
- * This interface is defines the properties of a top level application
+ * This interface defines the properties of a top level application
  * menu.
  *
  *  id:             Unique identifier
@@ -74,16 +64,21 @@ export type MenuOptions = Partial<MenuOptionsProps>;
 
 export interface AppMenuProps {
   id: string;
-  options: MenuOptions;
-  topLevelItems: TopLevelItemConfig[];
+  options: MenuOptionsProps;
+  topLevelItems: TopLevelItemProps[];
   type: 'appMenu';
 }
 
-export type AppMenuConfig = PartPartial<AppMenuProps, 'type'>;
+export interface AppMenuConfig {
+  id?: string;
+  options?: MenuOptionsConfig;
+  topLevelItems?: TopLevelItemConfig[];
+  type: 'appMenu';
+}
 
 /**
  * ContextMenuProps
- * ============
+ * ================
  * This interface defines the properties required to describe a
  * context menu.
  *
@@ -91,7 +86,7 @@ export type AppMenuConfig = PartPartial<AppMenuProps, 'type'>;
  *  options:        Properties that control the appearance of the
  *                  menu - defined by a MenuOptions configuration
  *                  object
- *  itemGroups:     several groups of menu items- items will be
+ *  itemGroups:     several groups of menu items - items will be
  *                  a mix of command menu items, checkbox menu items,
  *                  and sub-menu menu items
  *  type:           Identifies the type of menu - always 'contextMenu'
@@ -99,12 +94,17 @@ export type AppMenuConfig = PartPartial<AppMenuProps, 'type'>;
 
 export interface ContextMenuProps {
   id: string;
-  options: MenuOptions;
-  itemGroups: SubMenuGroupConfig[];
+  options: MenuOptionsProps;
+  itemGroups: SubMenuGroupProps[];
   type: 'contextMenu';
 }
 
-export type ContextMenuConfig = PartPartial<ContextMenuProps, 'type'>;
+export interface ContextMenuConfig {
+  id?: string;
+  options?: MenuOptionsConfig;
+  itemGroups?: SubMenuGroupConfig[];
+  type: 'contextMenu';
+}
 
 /**
  * SubMenuProps
@@ -115,7 +115,7 @@ export type ContextMenuConfig = PartPartial<ContextMenuProps, 'type'>;
  *  options:        Properties that control the appearance of the
  *                  menu - defined by a MenuOptions configuration
  *                  object
- *  itemGroups:     several groups of menu items- items will be
+ *  itemGroups:     several groups of menu items - items will be
  *                  a mix of command menu items, checkbox menu items,
  *                  and sub-menu menu items
  *  type:           Identies the type of the menu - always 'subMenu'
@@ -123,12 +123,17 @@ export type ContextMenuConfig = PartPartial<ContextMenuProps, 'type'>;
 
 export interface SubMenuProps {
   id: string;
-  options: MenuOptions;
-  itemGroups: SubMenuGroupConfig[];
+  options: MenuOptionsProps;
+  itemGroups: SubMenuGroupProps[];
   type: 'subMenu';
 }
 
-export type SubMenuConfig = PartPartial<SubMenuProps, 'type'>;
+export interface SubMenuConfig {
+  id?: string;
+  options?: MenuOptionsConfig;
+  itemGroups?: SubMenuGroupConfig[];
+  type: 'subMenu';
+}
 
 /**
  * CheckboxItemProps
@@ -151,12 +156,14 @@ export interface CheckboxItemProps {
   id: string;
   label: string;
   subLabel: string;
-  disabled: Signal<boolean>;
-  visible: Signal<boolean>;
-  checked: Signal<boolean>;
+  disabled: Observable<boolean>;
+  visible: Observable<boolean>;
+  checked: Observable<boolean>;
   exec: () => void;
   type: 'checkboxItem';
 }
+
+export type CheckboxItemConfig = PartPartial<CheckboxItemProps, 'type'>;
 
 /**
  * CommandItemProps
@@ -178,11 +185,13 @@ export interface CommandItemProps {
   id: string;
   label: string;
   subLabel: string;
-  disabled: Signal<boolean>;
-  visible: Signal<boolean>;
+  disabled: Observable<boolean>;
+  visible: Observable<boolean>;
   exec: () => void;
   type: 'commandItem';
 }
+
+export type CommandItemConfig = PartPartial<CommandItemProps, 'type'>;
 
 /**
  * SubMenuItemProps
@@ -203,10 +212,19 @@ export interface CommandItemProps {
 export interface SubMenuItemProps {
   id: string;
   label: string;
-  disabled: Signal<boolean>;
-  visible: Signal<boolean>;
+  disabled: Observable<boolean>;
+  visible: Observable<boolean>;
   type: 'subMenuItem';
-  subMenu: SubMenuConfig;
+  subMenu: SubMenuProps;
+}
+
+export interface SubMenuItemConfig {
+  id?: string;
+  label?: string;
+  disabled?: Observable<boolean>;
+  visible?: Observable<boolean>;
+  type: 'subMenuItem';
+  subMenu?: SubMenuConfig;
 }
 
 /**
@@ -227,15 +245,30 @@ export interface SubMenuItemProps {
 export interface TopLevelItemProps {
   id: string;
   label: string;
-  disabled: Signal<boolean>;
-  visible: Signal<boolean>;
+  disabled: Observable<boolean>;
+  visible: Observable<boolean>;
   type: 'topLevelItem';
-  subMenu: SubMenuConfig;
+  subMenu: SubMenuProps;
 }
 
-export type CheckboxItemConfig = PartPartial<CheckboxItemProps, 'type'>;
+export interface TopLevelItemConfig {
+  id?: string;
+  label?: string;
+  disabled?: Observable<boolean>;
+  visible?: Observable<boolean>;
+  type: 'topLevelItem';
+  subMenu?: SubMenuConfig;
+}
 
-export type CommandItemConfig = PartPartial<CommandItemProps, 'type'>;
+/**
+ *
+ */
+export type SubMenuChildItemProps =
+  | CommandItemProps
+  | CheckboxItemProps
+  | SubMenuItemProps;
+
+export type SubMenuGroupProps = SubMenuChildItemProps[];
 
 export type SubMenuChildItemConfig =
   | CommandItemConfig
@@ -243,7 +276,3 @@ export type SubMenuChildItemConfig =
   | SubMenuItemConfig;
 
 export type SubMenuGroupConfig = SubMenuChildItemConfig[];
-
-export type SubMenuItemConfig = PartPartial<SubMenuItemProps, 'type'>;
-
-export type TopLevelItemConfig = PartPartial<TopLevelItemProps, 'type'>;

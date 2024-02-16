@@ -1,6 +1,9 @@
 <div class="app-menu" [ngStyle]="getAppMenuStyles()">
   @for (item of menu.topLevelItems; track item.id) {
-  <div>{{ item.label }}</div>
+  <tfx-top-level-item
+    [item]="item"
+    [menuOptions]="menu.options"
+  ></tfx-top-level-item>
   }
 </div>
 <!-- <pre>

@@ -3,7 +3,7 @@ export {
   CheckboxItemConfig,
   CommandItemConfig,
   ContextMenuConfig,
-  MenuOptions,
+  MenuOptionsConfig as MenuOptions,
   SubMenuChildItemConfig,
   SubMenuConfig,
   SubMenuGroupConfig,

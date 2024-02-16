@@ -1,15 +1,19 @@
-import { signal } from '@angular/core';
 import { nanoid } from 'nanoid';
+import { from } from 'rxjs';
 import {
   AppMenuConfig,
   AppMenuProps,
   CheckboxItemConfig,
+  CheckboxItemProps,
   CommandItemConfig,
-  MenuOptions,
+  CommandItemProps,
+  MenuOptionsConfig,
   MenuOptionsProps,
   SubMenuConfig,
   SubMenuGroupConfig,
+  SubMenuGroupProps,
   SubMenuItemConfig,
+  SubMenuItemProps,
   SubMenuProps,
   TopLevelItemConfig,
   TopLevelItemProps,
@@ -67,8 +71,8 @@ function topupTopLevelItemsConfig(
         return {
           id: item.id ?? nanoid(),
           label: item.label ?? '',
-          disabled: item.disabled ?? signal(false).asReadonly(),
-          visible: item.visible ?? signal(true).asReadonly(),
+          disabled: item.disabled ?? from([false]),
+          visible: item.visible ?? from([true]),
           subMenu: topupSubMenuConfig(item.subMenu),
           type: 'topLevelItem',
         } as TopLevelItemProps;
@@ -94,13 +98,13 @@ function topupSubMenuConfig(subMenu: SubMenuConfig | undefined): SubMenuProps {
 
 function topupItemGroupsConfig(
   itemGroups: SubMenuGroupConfig[] | undefined
-): SubMenuGroupConfig[] {
+): SubMenuGroupProps[] {
   return itemGroups
     ? itemGroups.map((group) => topupItemGroupConfig(group))
     : [];
 }
 
-function topupItemGroupConfig(group: SubMenuGroupConfig): SubMenuGroupConfig {
+function topupItemGroupConfig(group: SubMenuGroupConfig): SubMenuGroupProps {
   return group.map((item) => {
     switch (item.type) {
       case 'commandItem': {
@@ -116,44 +120,44 @@ function topupItemGroupConfig(group: SubMenuGroupConfig): SubMenuGroupConfig {
   });
 }
 
-function topupCommandItemConfig(item: CommandItemConfig): CommandItemConfig {
+function topupCommandItemConfig(item: CommandItemConfig): CommandItemProps {
   return {
     id: item.id ?? nanoid(),
     label: item.label ?? 'Unknown',
     subLabel: item.subLabel ?? '',
-    disabled: item.disabled ?? signal(false).asReadonly(),
-    visible: item.visible ?? signal(true).asReadonly(),
+    disabled: item.disabled ?? from([false]),
+    visible: item.visible ?? from([true]),
     exec: item.exec ?? (() => undefined),
     type: 'commandItem',
   };
 }
 
-function topupCheckboxItemConfig(item: CheckboxItemConfig): CheckboxItemConfig {
+function topupCheckboxItemConfig(item: CheckboxItemConfig): CheckboxItemProps {
   return {
     id: item.id ?? nanoid(),
     label: item.label ?? 'Unknown',
     subLabel: item.subLabel ?? '',
-    disabled: item.disabled ?? signal(false).asReadonly(),
-    visible: item.visible ?? signal(true).asReadonly(),
-    checked: item.checked ?? signal(false).asReadonly(),
+    disabled: item.disabled ?? from([false]),
+    visible: item.visible ?? from([true]),
+    checked: item.checked ?? from([false]),
     exec: item.exec ?? (() => undefined),
     type: 'checkboxItem',
   };
 }
 
-function topupSubMenuItemConfig(item: SubMenuItemConfig): SubMenuItemConfig {
+function topupSubMenuItemConfig(item: SubMenuItemConfig): SubMenuItemProps {
   return {
     id: item.id ?? nanoid(),
     label: item.label ?? 'Unknown',
-    disabled: item.disabled ?? signal(false).asReadonly(),
-    visible: item.visible ?? signal(true).asReadonly(),
+    disabled: item.disabled ?? from([false]),
+    visible: item.visible ?? from([true]),
     subMenu: topupSubMenuConfig(item.subMenu),
     type: 'subMenuItem',
   };
 }
 
 function topupMenuOptions(
-  options: MenuOptions | undefined,
+  options: MenuOptionsConfig | undefined,
   defaults: MenuOptionsProps
 ): MenuOptionsProps {
   return options ? { ...defaults, ...options } : { ...defaults };
