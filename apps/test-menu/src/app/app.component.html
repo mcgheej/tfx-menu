@@ -1,3 +1,7 @@
-<div class="menu-bar">
+<div
+  class="menu-bar"
+  [style.backgroundColor]="showShortMenu ? '#3f51b5' : '#008000'"
+>
   <tfx-app-menu [menu]="appMenu"></tfx-app-menu>
 </div>
+<button (click)="onClick()">Toggle</button>

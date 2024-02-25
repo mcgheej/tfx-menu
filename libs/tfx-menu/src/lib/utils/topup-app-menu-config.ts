@@ -18,26 +18,10 @@ import {
   TopLevelItemConfig,
   TopLevelItemProps,
 } from '../types';
-
-const APP_MENU_DEFAULT_OPTIONS: MenuOptionsProps = {
-  itemTextColor: '#ffffff',
-  disabledItemTextColor: '#aaaaaa',
-  itemBackgroundColor: '#008000',
-  itemHighlightColor: '#006000',
-  itemGroupSeparatorColor: '#aaaaaa',
-  fontSizePixels: 13,
-  outlinedIcons: false,
-};
-
-const SUB_MENU_DEFAULT_OPTIONS: MenuOptionsProps = {
-  itemTextColor: '#212121',
-  disabledItemTextColor: '#aaaaaa',
-  itemBackgroundColor: '#ffffff',
-  itemHighlightColor: '#cccccc',
-  itemGroupSeparatorColor: '#aaaaaa',
-  fontSizePixels: 13,
-  outlinedIcons: false,
-};
+import {
+  APP_MENU_DEFAULT_OPTIONS,
+  SUB_MENU_DEFAULT_OPTIONS,
+} from './menu-defaults';
 
 /**
  *

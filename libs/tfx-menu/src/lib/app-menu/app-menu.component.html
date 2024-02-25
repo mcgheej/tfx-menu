@@ -1,8 +1,15 @@
-<div class="app-menu" [ngStyle]="getAppMenuStyles()">
+<div
+  *ngIf="activeItemId$ | async as activeItemId"
+  class="app-menu"
+  [ngStyle]="getAppMenuStyles()"
+>
   @for (item of menu.topLevelItems; track item.id) {
   <tfx-top-level-item
     [item]="item"
     [menuOptions]="menu.options"
+    [activeItemId]="activeItemId"
+    (mouseEnter)="onMouseEnter(item)"
+    (mouseLeave)="onMouseLeave(item)"
   ></tfx-top-level-item>
   }
 </div>
