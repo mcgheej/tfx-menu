@@ -24,7 +24,10 @@ export const appMenuMachine = setup({
   actions: {
     activateItem: assign({
       activeItem: ({ context, event }) => {
-        if (event.type === 'topLevelItem.enter') {
+        if (
+          event.type === 'topLevelItem.enter' ||
+          event.type === 'topLevelItem.click'
+        ) {
           if (event.item) {
             return event.item;
           }
@@ -39,19 +42,20 @@ export const appMenuMachine = setup({
     openSubMenu: function ({ context, event }, params) {
       // Add your action code here
       // ...
-      console.log(context, event, params);
     },
     closeSubMenu: function ({ context, event }, params) {
       // Add your action code here
       // ...
-      console.log(context, event, params);
     },
   },
   guards: {
     itemNotActiveItem: function ({ context, event }) {
-      // Add your guard condition here
-      console.log(context, event);
-      return true;
+      if (event.type === 'topLevelItem.enter' && context.activeItem) {
+        if (context.activeItem.id !== event.item.id) {
+          return true;
+        }
+      }
+      return false;
     },
   },
   schemas: {
@@ -123,6 +127,7 @@ export const appMenuMachine = setup({
             },
             'topLevelItem.enter': {
               target: 'expanded',
+              reenter: true,
               guard: {
                 type: 'itemNotActiveItem',
               },

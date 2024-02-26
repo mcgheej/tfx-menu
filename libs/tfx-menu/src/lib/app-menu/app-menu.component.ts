@@ -55,4 +55,8 @@ export class AppMenuComponent implements OnChanges, OnDestroy {
   onMouseLeave(item: TopLevelItemProps) {
     this.service.onMouseLeave(item);
   }
+
+  onMouseClick(item: TopLevelItemProps) {
+    this.service.onMouseClick(item);
+  }
 }

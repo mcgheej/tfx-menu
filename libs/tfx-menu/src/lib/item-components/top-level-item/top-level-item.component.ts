@@ -28,6 +28,7 @@ export class TopLevelItemComponent implements OnChanges, OnDestroy {
   @Input({ required: true }) activeItemId!: string;
   @Output() mouseEnter = new EventEmitter<void>();
   @Output() mouseLeave = new EventEmitter<void>();
+  @Output() mouseClick = new EventEmitter<void>();
 
   private service = inject(TopLevelItemService);
 
@@ -47,5 +48,9 @@ export class TopLevelItemComponent implements OnChanges, OnDestroy {
 
   onMouseLeave() {
     this.mouseLeave.emit();
+  }
+
+  onMouseClick() {
+    this.mouseClick.emit();
   }
 }

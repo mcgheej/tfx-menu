@@ -45,4 +45,10 @@ export class AppMenuService {
       this.appMenuActor.send({ type: 'topLevelItem.leave', item });
     }
   }
+
+  onMouseClick(item: TopLevelItemProps) {
+    if (this.appMenuActor) {
+      this.appMenuActor.send({ type: 'topLevelItem.click', item });
+    }
+  }
 }
