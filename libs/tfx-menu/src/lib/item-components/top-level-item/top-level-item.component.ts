@@ -44,15 +44,21 @@ export class TopLevelItemComponent implements OnChanges, OnDestroy {
     this.vm.clearDown();
   }
 
-  onMouseEnter() {
-    this.mouseEnter.emit();
+  onMouseEnter(disabled: boolean) {
+    if (!disabled) {
+      this.mouseEnter.emit();
+    }
   }
 
-  onMouseLeave() {
-    this.mouseLeave.emit();
+  onMouseLeave(disabled: boolean) {
+    if (!disabled) {
+      this.mouseLeave.emit();
+    }
   }
 
-  onMouseClick() {
-    this.mouseClick.emit();
+  onMouseClick(disabled: boolean) {
+    if (!disabled) {
+      this.mouseClick.emit();
+    }
   }
 }

@@ -37,6 +37,7 @@ import { APP_MENU_DEFAULT_OPTIONS } from '../../utils/menu-defaults';
  */
 export interface TopLevelItemVm {
   visible: boolean;
+  disabled: boolean;
   color: string;
   backgroundColor: string;
   label: string;
@@ -66,6 +67,7 @@ export class TopLevelItemVmService {
       if (item) {
         return {
           visible,
+          disabled,
           color: disabled
             ? menuOptions.disabledItemTextColor
             : menuOptions.itemTextColor,
@@ -78,6 +80,7 @@ export class TopLevelItemVmService {
       }
       return {
         visible: false,
+        disabled: false,
         color: '#000000',
         backgroundColor: '#ffffff',
         label: '',

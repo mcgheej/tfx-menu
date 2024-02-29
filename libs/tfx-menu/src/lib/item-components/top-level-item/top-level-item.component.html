@@ -3,9 +3,9 @@
   class="item-container"
   [style.backgroundColor]="vm.backgroundColor"
   [style.color]="vm.color"
-  (mouseenter)="onMouseEnter()"
-  (mouseleave)="onMouseLeave()"
-  (click)="onMouseClick()"
+  (mouseenter)="onMouseEnter(vm.disabled)"
+  (mouseleave)="onMouseLeave(vm.disabled)"
+  (click)="onMouseClick(vm.disabled)"
 >
   <div class="item">{{ vm.label }}</div>
 </div>
