@@ -86,10 +86,46 @@ export const shortMenu: AppMenuConfig = {
       type: 'topLevelItem',
       label: 'Edit',
       disabled: from([false]),
+      subMenu: {
+        type: 'subMenu',
+        itemGroups: [
+          [
+            {
+              type: 'commandItem',
+              label: 'Cut',
+            },
+            {
+              type: 'commandItem',
+              label: 'Copy',
+            },
+            {
+              type: 'commandItem',
+              label: 'Paste',
+            },
+          ],
+          [
+            {
+              type: 'commandItem',
+              label: 'Delete',
+            },
+          ],
+        ],
+      },
     },
     {
       type: 'topLevelItem',
       label: 'Help',
+      subMenu: {
+        type: 'subMenu',
+        itemGroups: [
+          [
+            {
+              type: 'commandItem',
+              label: 'About',
+            },
+          ],
+        ],
+      },
     },
   ],
 };

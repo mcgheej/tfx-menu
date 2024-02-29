@@ -12,10 +12,10 @@ import {
   Injector,
   inject,
 } from '@angular/core';
+import { SubMenuComponent } from '../menu-components/sub-menu/sub-menu.component';
 import { SUB_MENU_DATA } from '../tokens';
 import { SubMenuChildItemProps, SubMenuProps } from '../types';
 import { PopupRef } from './popup-ref';
-import { TempComponent } from './temp.component';
 
 export interface PopupComponentOptions {
   panelClass?: string;
@@ -73,10 +73,14 @@ export class PopupService {
     overlayRef: OverlayRef,
     subMenu: SubMenuProps,
     popupRef: PopupRef<SubMenuChildItemProps>
-  ): TempComponent {
+  ): SubMenuComponent {
     const injector = this.createInjector(subMenu, popupRef);
-    const containerPortal = new ComponentPortal(TempComponent, null, injector);
-    const containerRef: ComponentRef<TempComponent> =
+    const containerPortal = new ComponentPortal(
+      SubMenuComponent,
+      null,
+      injector
+    );
+    const containerRef: ComponentRef<SubMenuComponent> =
       overlayRef.attach(containerPortal);
     return containerRef.instance;
   }

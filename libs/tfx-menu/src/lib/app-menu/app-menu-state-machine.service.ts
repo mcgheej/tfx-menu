@@ -57,4 +57,10 @@ export class AppMenuStateMachineService {
       this.appMenuActor.send({ type: 'topLevelItem.click', item });
     }
   }
+
+  onBackdropClick() {
+    if (this.appMenuActor) {
+      this.appMenuActor.send({ type: 'backdrop.click' });
+    }
+  }
 }

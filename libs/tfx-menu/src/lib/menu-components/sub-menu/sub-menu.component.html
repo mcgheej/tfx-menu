@@ -1,1 +1,23 @@
-<p>sub-menu works!</p>
+<section
+  class="menu-container"
+  [style.color]="subMenu.options.itemTextColor"
+  [style.backgroundColor]="subMenu.options.itemBackgroundColor"
+  [style.fontSize.px]="subMenu.options.fontSizePixels"
+>
+  @for (group of subMenu.itemGroups; track $index; let isLast = $last) {
+  <div class="menu-group">
+    @for (item of group; track item.id) {
+    <div>
+      <ng-container
+        *ngComponentOutlet="getComponentType(item); injector: getInjector(item)"
+      ></ng-container>
+    </div>
+    }
+  </div>
+  @if (!isLast) {
+  <div
+    class="separator"
+    [style.backgroundColor]="subMenu.options.itemGroupSeparatorColor"
+  ></div>
+  } }
+</section>

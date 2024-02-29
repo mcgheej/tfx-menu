@@ -40,6 +40,7 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
   private subMenuController = inject(AppMenuSubMenuService);
 
   private itemComponentsSubscription: Subscription | null = null;
+  private backdropClickSubscription: Subscription | null = null;
 
   activeItemId$ = this.stateMachine.activeItemId$;
 
@@ -55,11 +56,18 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
         this.subMenuController.setItemComponents(children);
       }
     );
+    this.backdropClickSubscription =
+      this.subMenuController.backdropClick$.subscribe(() =>
+        this.stateMachine.onBackdropClick()
+      );
   }
 
   ngOnDestroy(): void {
     if (this.itemComponentsSubscription) {
       this.itemComponentsSubscription.unsubscribe();
+    }
+    if (this.backdropClickSubscription) {
+      this.backdropClickSubscription.unsubscribe();
     }
     this.stateMachine.stopStateMachine();
   }

@@ -1,0 +1,19 @@
+.menu-container {
+  border: 1px solid #eee;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: max-content;
+  padding: 0.3846em 0;
+  box-shadow: 1px 1px 1px 0 #eee;
+}
+
+.menu-group {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.separator {
+  /* margin: 3px 10px; */
+  margin: 0.2308em 10px;
+  height: 1px;
+}

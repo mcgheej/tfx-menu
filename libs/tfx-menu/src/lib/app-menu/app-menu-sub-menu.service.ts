@@ -1,4 +1,5 @@
 import { Injectable, QueryList, inject } from '@angular/core';
+import { Subject } from 'rxjs';
 import { TopLevelItemComponent } from '../item-components/top-level-item/top-level-item.component';
 import { PopupRef } from '../popup-service/popup-ref';
 import { PopupService } from '../popup-service/popup-service';
@@ -7,6 +8,9 @@ import { SubMenuChildItemProps, TopLevelItemProps } from '../types';
 @Injectable()
 export class AppMenuSubMenuService {
   private popup = inject(PopupService);
+
+  private backdropClickSubject$ = new Subject<void>();
+  backdropClick$ = this.backdropClickSubject$.asObservable();
 
   private menuRef: PopupRef<SubMenuChildItemProps> | null = null;
 
@@ -24,7 +28,7 @@ export class AppMenuSubMenuService {
         if (item.id !== this.expandedItem.id) {
           // Need to close currently open sub-menu and open new sub-menu
           // for newly expanded item
-          this.closeSubMenu(this.expandedItem);
+          this.closeSubMenu();
           this.openSubMenu(item);
           this.expandedItem = item;
         }
@@ -36,15 +40,14 @@ export class AppMenuSubMenuService {
     } else {
       // Close any sub-menu currently open
       if (this.expandedItem) {
-        this.closeSubMenu(this.expandedItem);
+        this.closeSubMenu();
         this.expandedItem = null;
       }
     }
   }
 
-  private closeSubMenu(item: TopLevelItemProps) {
+  private closeSubMenu() {
     if (this.menuRef) {
-      console.log(`close ${item.label} sub-menu`);
       this.menuRef.close();
       this.menuRef = null;
     }
@@ -52,10 +55,9 @@ export class AppMenuSubMenuService {
 
   private openSubMenu(item: TopLevelItemProps) {
     if (this.menuRef) {
-      this.closeSubMenu(item);
+      this.closeSubMenu();
     }
     if (this.itemComponents[item.id]) {
-      console.log(`open ${item.label} sub-menu`);
       this.menuRef = this.popup.openSubMenu(item.subMenu, {
         associatedElement: this.itemComponents[item.id].elementRef,
         positions: [
@@ -67,7 +69,8 @@ export class AppMenuSubMenuService {
           },
         ],
         backdropClick: () => {
-          this.closeSubMenu(item);
+          this.closeSubMenu();
+          this.backdropClickSubject$.next();
         },
       });
     }
