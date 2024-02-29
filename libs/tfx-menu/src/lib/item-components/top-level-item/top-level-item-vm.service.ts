@@ -43,7 +43,7 @@ export interface TopLevelItemVm {
 }
 
 @Injectable()
-export class TopLevelItemService {
+export class TopLevelItemVmService {
   // Observables used to drive component TopLevelVm observable
   private activeId$ = new BehaviorSubject<string>(noItemActive);
   private disabled$ = new BehaviorSubject<boolean>(false);

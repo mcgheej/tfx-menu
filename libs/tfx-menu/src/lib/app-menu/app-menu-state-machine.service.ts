@@ -2,17 +2,22 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 import { Actor, createActor } from 'xstate';
 import { AppMenuProps, TopLevelItemProps } from '../types';
+import { AppMenuSubMenuService } from './app-menu-sub-menu.service';
 import { appMenuMachine, noItemActive } from './app-menu.xstate';
 
 @Injectable()
-export class AppMenuService {
+export class AppMenuStateMachineService {
   private activeItemIdSubject$ = new BehaviorSubject<string>(noItemActive);
   activeItemId$ = this.activeItemIdSubject$
     .asObservable()
     .pipe(distinctUntilChanged());
+
   private appMenuActor: Actor<typeof appMenuMachine> | undefined;
 
-  startStateMachine(appMenu: AppMenuProps) {
+  startStateMachine(
+    appMenu: AppMenuProps,
+    subMenuController: AppMenuSubMenuService
+  ) {
     if (this.appMenuActor) {
       this.stopStateMachine();
     }
@@ -25,6 +30,7 @@ export class AppMenuService {
     this.appMenuActor.subscribe((snapshot) => {
       const item = snapshot.context.activeItem;
       this.activeItemIdSubject$.next(item ? item.id : noItemActive);
+      subMenuController.checkExpandedItem(snapshot.context.expandedItem);
     });
   }
 

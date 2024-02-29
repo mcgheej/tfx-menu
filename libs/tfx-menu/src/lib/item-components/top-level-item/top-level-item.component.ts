@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
@@ -11,7 +12,7 @@ import {
   inject,
 } from '@angular/core';
 import { MenuOptionsProps, TopLevelItemProps } from '../../types';
-import { TopLevelItemService } from './top-level-item.service';
+import { TopLevelItemVmService } from './top-level-item-vm.service';
 
 @Component({
   selector: 'tfx-top-level-item',
@@ -20,7 +21,7 @@ import { TopLevelItemService } from './top-level-item.service';
   templateUrl: './top-level-item.component.html',
   styleUrl: './top-level-item.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [TopLevelItemService],
+  providers: [TopLevelItemVmService],
 })
 export class TopLevelItemComponent implements OnChanges, OnDestroy {
   @Input({ required: true }) item!: TopLevelItemProps;
@@ -30,16 +31,17 @@ export class TopLevelItemComponent implements OnChanges, OnDestroy {
   @Output() mouseLeave = new EventEmitter<void>();
   @Output() mouseClick = new EventEmitter<void>();
 
-  private service = inject(TopLevelItemService);
+  elementRef = inject(ElementRef);
+  private vm = inject(TopLevelItemVmService);
 
-  vm$ = this.service.vm$;
+  vm$ = this.vm.vm$;
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.service.onChanges(changes);
+    this.vm.onChanges(changes);
   }
 
   ngOnDestroy(): void {
-    this.service.clearDown();
+    this.vm.clearDown();
   }
 
   onMouseEnter() {

@@ -2,10 +2,12 @@ import { assign, setup } from 'xstate';
 import { AppMenuProps, TopLevelItemProps } from '../types';
 
 export const noItemActive = 'No item active';
+export const noItemExpanded = 'No item expanded';
 
 export interface AppMenuContext {
   appMenu: AppMenuProps;
   activeItem: TopLevelItemProps | null;
+  expandedItem: TopLevelItemProps | null;
 }
 
 export type AppMenuEvents =
@@ -39,14 +41,23 @@ export const appMenuMachine = setup({
     deactivateItem: assign({
       activeItem: () => null,
     }),
-    openSubMenu: function ({ context, event }, params) {
-      // Add your action code here
-      // ...
-    },
-    closeSubMenu: function ({ context, event }, params) {
-      // Add your action code here
-      // ...
-    },
+    openSubMenu: assign({
+      expandedItem: ({ context, event }) => {
+        if (
+          event.type === 'topLevelItem.enter' ||
+          event.type === 'topLevelItem.click'
+        ) {
+          if (event.item) {
+            return event.item;
+          }
+          return null;
+        }
+        return context.expandedItem;
+      },
+    }),
+    closeSubMenu: assign({
+      expandedItem: () => null,
+    }),
   },
   guards: {
     itemNotActiveItem: function ({ context, event }) {
@@ -83,7 +94,11 @@ export const appMenuMachine = setup({
     },
   },
 }).createMachine({
-  context: ({ input }) => ({ appMenu: input.appMenu, activeItem: null }),
+  context: ({ input }) => ({
+    appMenu: input.appMenu,
+    activeItem: null,
+    expandedItem: null,
+  }),
   id: 'appMenu',
   initial: 'notActive',
   states: {

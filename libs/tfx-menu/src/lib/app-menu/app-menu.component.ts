@@ -1,15 +1,21 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Input,
   OnChanges,
   OnDestroy,
+  QueryList,
+  ViewChildren,
+  inject,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { TopLevelItemComponent } from '../item-components/top-level-item/top-level-item.component';
 import { AppMenuConfig, AppMenuProps, TopLevelItemProps } from '../types';
 import { topupAppMenuConfig } from '../utils/topup-app-menu-config';
-import { AppMenuService } from './app-menu.service';
+import { AppMenuStateMachineService } from './app-menu-state-machine.service';
+import { AppMenuSubMenuService } from './app-menu-sub-menu.service';
 
 @Component({
   selector: 'tfx-app-menu',
@@ -18,26 +24,44 @@ import { AppMenuService } from './app-menu.service';
   templateUrl: './app-menu.component.html',
   styleUrl: './app-menu.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [AppMenuService],
+  providers: [AppMenuStateMachineService, AppMenuSubMenuService],
 })
-export class AppMenuComponent implements OnChanges, OnDestroy {
+export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
   @Input({
     required: true,
     transform: (menu: AppMenuConfig) => topupAppMenuConfig(menu),
   })
   menu!: AppMenuProps;
 
-  activeItemId$ = this.service.activeItemId$;
+  @ViewChildren(TopLevelItemComponent)
+  viewChildren!: QueryList<TopLevelItemComponent>;
 
-  constructor(private service: AppMenuService) {}
+  private stateMachine = inject(AppMenuStateMachineService);
+  private subMenuController = inject(AppMenuSubMenuService);
+
+  private itemComponentsSubscription: Subscription | null = null;
+
+  activeItemId$ = this.stateMachine.activeItemId$;
 
   ngOnChanges(): void {
-    this.service.stopStateMachine();
-    this.service.startStateMachine(this.menu); // TODO: Should this be OnChanges?
+    this.stateMachine.stopStateMachine();
+    this.stateMachine.startStateMachine(this.menu, this.subMenuController);
+  }
+
+  ngAfterViewInit(): void {
+    this.subMenuController.setItemComponents(this.viewChildren);
+    this.itemComponentsSubscription = this.viewChildren.changes.subscribe(
+      (children) => {
+        this.subMenuController.setItemComponents(children);
+      }
+    );
   }
 
   ngOnDestroy(): void {
-    this.service.stopStateMachine();
+    if (this.itemComponentsSubscription) {
+      this.itemComponentsSubscription.unsubscribe();
+    }
+    this.stateMachine.stopStateMachine();
   }
 
   getAppMenuStyles() {
@@ -49,14 +73,14 @@ export class AppMenuComponent implements OnChanges, OnDestroy {
   }
 
   onMouseEnter(item: TopLevelItemProps) {
-    this.service.onMouseEnter(item);
+    this.stateMachine.onMouseEnter(item);
   }
 
   onMouseLeave(item: TopLevelItemProps) {
-    this.service.onMouseLeave(item);
+    this.stateMachine.onMouseLeave(item);
   }
 
   onMouseClick(item: TopLevelItemProps) {
-    this.service.onMouseClick(item);
+    this.stateMachine.onMouseClick(item);
   }
 }
