@@ -2,19 +2,19 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { combineLatest, map } from 'rxjs';
 import { MENU_ITEM_DATA } from '../../tokens';
-import { CommandItemProps } from '../../types';
+import { CheckboxItemProps } from '../../types';
 
 @Component({
-  selector: 'tfx-command-item',
+  selector: 'tfx-checkbox-item',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './command-item.component.html',
-  styleUrl: './command-item.component.css',
+  templateUrl: './checkbox-item.component.html',
+  styleUrl: './checkbox-item.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommandItemComponent {
+export class CheckboxItemComponent {
   menuItemData = inject(MENU_ITEM_DATA);
-  menuItem = this.menuItemData.menuItem as CommandItemProps;
+  menuItem = this.menuItemData.menuItem as CheckboxItemProps;
   parentMenu = this.menuItemData.parentSubMenu;
   parentStateMachine = this.parentMenu.stateMachine;
 
@@ -22,8 +22,9 @@ export class CommandItemComponent {
     this.parentStateMachine.activeItemId$,
     this.menuItem.disabled,
     this.menuItem.visible,
+    this.menuItem.checked,
   ]).pipe(
-    map(([activeId, disabled, visible]) => {
+    map(([activeId, disabled, visible, checked]) => {
       const menuOptions = this.parentMenu.menuProps.options;
       return {
         color: disabled
@@ -35,6 +36,7 @@ export class CommandItemComponent {
             : menuOptions.itemBackgroundColor,
         cursor: disabled ? 'default' : 'pointer',
         visible,
+        checked,
       };
     })
   );

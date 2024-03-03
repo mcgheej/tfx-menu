@@ -1,12 +1,3 @@
-/**
- * To Level Menu Service
- * =====================
- * This service takes inputs to an associated TopLevelItemComponent
- * instance and emits an object containing the properties required
- * by the component to render itself appropriately. Each component
- * provides a singleton for this service.
- *
- */
 import { Injectable, SimpleChanges } from '@angular/core';
 import {
   BehaviorSubject,
@@ -17,46 +8,32 @@ import {
   map,
 } from 'rxjs';
 import { noItemActive } from '../../app-menu/app-menu.xstate';
-import { MenuOptionsProps, TopLevelItemProps } from '../../types';
-import { APP_MENU_DEFAULT_OPTIONS } from '../../utils/menu-defaults';
+import { CommandItemProps, MenuOptionsProps } from '../../types';
+import { SUB_MENU_DEFAULT_OPTIONS } from '../../utils/menu-defaults';
 
-/**
- * This interface defines the properties required by a TopLevelItemComponent
- * instance to render the component appropriately
- *
- * visible:         whether or not the item is visible - obtained directly
- *                  from the item's visible property
- * color:           color of the item label text (hexadecimal color) - dependent
- *                  on the last value emitted by the item's disabled property and
- *                  taken from the item's parent menu's menuOptions
- * backgroundColor: color of the item background (hexadecimal color) - if the
- *                  item is not disabled the background is highlighted if the
- *                  id of the active item equals the id of the item associated
- *                  with this component
- * label:           the label to be displayed for the item
- */
-export interface TopLevelItemVm {
-  visible: boolean;
-  disabled: boolean;
+export interface CommandItemVm {
   color: string;
   backgroundColor: string;
+  cursor: string;
+  visible: boolean;
   label: string;
+  subLabel: string;
 }
 
 @Injectable()
-export class TopLevelItemVmService {
-  // Observables used to drive component TopLevelVm observable
+export class CommandItemVmService {
+  // Observables used to drive component CommandItemVm observable
   private activeId$ = new BehaviorSubject<string>(noItemActive);
   private disabled$ = new BehaviorSubject<boolean>(false);
   private visible$ = new BehaviorSubject<boolean>(false);
-  private item$ = new BehaviorSubject<TopLevelItemProps | null>(null);
+  private item$ = new BehaviorSubject<CommandItemProps | null>(null);
   private menuOptions$ = new BehaviorSubject<MenuOptionsProps>({
-    ...APP_MENU_DEFAULT_OPTIONS,
+    ...SUB_MENU_DEFAULT_OPTIONS,
   });
 
-  // TopLevelVm observable - emits whenever one of the 5 contributing
+  // CommandItemVm observable - emits whenever one of the 5 contributing
   // observables emits.
-  vm$: Observable<TopLevelItemVm> = combineLatest([
+  vm$: Observable<CommandItemVm> = combineLatest([
     this.activeId$.pipe(distinctUntilChanged()),
     this.disabled$.pipe(distinctUntilChanged()),
     this.visible$.pipe(distinctUntilChanged()),
@@ -75,15 +52,20 @@ export class TopLevelItemVmService {
             activeId === item.id && !disabled
               ? menuOptions.itemHighlightColor
               : menuOptions.itemBackgroundColor,
+          cursor: disabled ? 'default' : 'pointer',
           label: item.label,
+          subLabel: item.subLabel,
         };
       }
+
       return {
         visible: false,
         disabled: false,
         color: '#000000',
         backgroundColor: '#ffffff',
+        cursor: 'pointer',
         label: '',
+        subLabel: '',
       };
     })
   );
@@ -137,7 +119,7 @@ export class TopLevelItemVmService {
   // Emit the item to update the compnent's VM properties and
   // resubscribe to the item's disabled and visible observables to
   // drive the input observables to the component's VM observable
-  private changeItem(item: TopLevelItemProps) {
+  private changeItem(item: CommandItemProps) {
     this.item$.next(item);
 
     if (this.itemDisabledSubscription) {

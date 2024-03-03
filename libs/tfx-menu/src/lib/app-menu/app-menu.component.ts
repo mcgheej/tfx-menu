@@ -36,7 +36,7 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChildren(TopLevelItemComponent)
   viewChildren!: QueryList<TopLevelItemComponent>;
 
-  private stateMachine = inject(AppMenuStateMachineService);
+  stateMachine = inject(AppMenuStateMachineService);
   private subMenuController = inject(AppMenuSubMenuService);
 
   private itemComponentsSubscription: Subscription | null = null;
@@ -46,7 +46,11 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   ngOnChanges(): void {
     this.stateMachine.stopStateMachine();
-    this.stateMachine.startStateMachine(this.menu, this.subMenuController);
+    this.stateMachine.startStateMachine(
+      this.menu,
+      this,
+      this.subMenuController
+    );
   }
 
   ngAfterViewInit(): void {

@@ -2,19 +2,19 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { combineLatest, map } from 'rxjs';
 import { MENU_ITEM_DATA } from '../../tokens';
-import { CommandItemProps } from '../../types';
+import { SubMenuItemProps } from '../../types';
 
 @Component({
-  selector: 'tfx-command-item',
+  selector: 'tfx-sub-menu-item',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './command-item.component.html',
-  styleUrl: './command-item.component.css',
+  templateUrl: './sub-menu-item.component.html',
+  styleUrl: './sub-menu-item.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommandItemComponent {
+export class SubMenuItemComponent {
   menuItemData = inject(MENU_ITEM_DATA);
-  menuItem = this.menuItemData.menuItem as CommandItemProps;
+  menuItem = this.menuItemData.menuItem as SubMenuItemProps;
   parentMenu = this.menuItemData.parentSubMenu;
   parentStateMachine = this.parentMenu.stateMachine;
 
@@ -38,8 +38,4 @@ export class CommandItemComponent {
       };
     })
   );
-
-  itemClick() {
-    this.menuItem.exec();
-  }
 }

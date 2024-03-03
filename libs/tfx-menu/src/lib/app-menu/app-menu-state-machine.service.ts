@@ -3,6 +3,7 @@ import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 import { Actor, createActor } from 'xstate';
 import { AppMenuProps, TopLevelItemProps } from '../types';
 import { AppMenuSubMenuService } from './app-menu-sub-menu.service';
+import { AppMenuComponent } from './app-menu.component';
 import { appMenuMachine, noItemActive } from './app-menu.xstate';
 
 @Injectable()
@@ -16,11 +17,10 @@ export class AppMenuStateMachineService {
 
   startStateMachine(
     appMenu: AppMenuProps,
+    parentMenu: AppMenuComponent,
     subMenuController: AppMenuSubMenuService
   ) {
-    if (this.appMenuActor) {
-      this.stopStateMachine();
-    }
+    this.stopStateMachine();
     this.appMenuActor = createActor(appMenuMachine, {
       input: {
         appMenu: appMenu,
@@ -30,13 +30,17 @@ export class AppMenuStateMachineService {
     this.appMenuActor.subscribe((snapshot) => {
       const item = snapshot.context.activeItem;
       this.activeItemIdSubject$.next(item ? item.id : noItemActive);
-      subMenuController.checkExpandedItem(snapshot.context.expandedItem);
+      subMenuController.checkExpandedItem(
+        snapshot.context.expandedItem,
+        parentMenu
+      );
     });
   }
 
   stopStateMachine() {
     if (this.appMenuActor) {
       this.appMenuActor.stop();
+      this.appMenuActor = undefined;
     }
   }
 

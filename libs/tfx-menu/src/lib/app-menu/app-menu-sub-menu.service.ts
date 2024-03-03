@@ -4,6 +4,7 @@ import { TopLevelItemComponent } from '../item-components/top-level-item/top-lev
 import { PopupRef } from '../popup-service/popup-ref';
 import { PopupService } from '../popup-service/popup-service';
 import { SubMenuChildItemProps, TopLevelItemProps } from '../types';
+import { AppMenuComponent } from './app-menu.component';
 
 @Injectable()
 export class AppMenuSubMenuService {
@@ -22,19 +23,22 @@ export class AppMenuSubMenuService {
     components.map((cmp) => (this.itemComponents[cmp.item.id] = cmp));
   }
 
-  checkExpandedItem(item: TopLevelItemProps | null) {
+  checkExpandedItem(
+    item: TopLevelItemProps | null,
+    parentMenu: AppMenuComponent
+  ) {
     if (item) {
       if (this.expandedItem) {
         if (item.id !== this.expandedItem.id) {
           // Need to close currently open sub-menu and open new sub-menu
           // for newly expanded item
           this.closeSubMenu();
-          this.openSubMenu(item);
+          this.openSubMenu(item, parentMenu);
           this.expandedItem = item;
         }
       } else {
         // need to open sub-menu for item - no sub-menu open at the moment
-        this.openSubMenu(item);
+        this.openSubMenu(item, parentMenu);
         this.expandedItem = item;
       }
     } else {
@@ -53,12 +57,12 @@ export class AppMenuSubMenuService {
     }
   }
 
-  private openSubMenu(item: TopLevelItemProps) {
+  private openSubMenu(item: TopLevelItemProps, appMenu: AppMenuComponent) {
     if (this.menuRef) {
       this.closeSubMenu();
     }
     if (this.itemComponents[item.id]) {
-      this.menuRef = this.popup.openSubMenu(item.subMenu, {
+      this.menuRef = this.popup.openSubMenu(item.subMenu, appMenu, {
         associatedElement: this.itemComponents[item.id].elementRef,
         positions: [
           {

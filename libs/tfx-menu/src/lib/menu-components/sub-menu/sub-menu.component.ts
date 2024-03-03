@@ -3,11 +3,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   Injector,
+  OnDestroy,
+  OnInit,
   inject,
 } from '@angular/core';
+import { CheckboxItemComponent } from '../../item-components/checkbox-item/checkbox-item.component';
 import { CommandItemComponent } from '../../item-components/command-item/command-item.component';
+import { SubMenuItemComponent } from '../../item-components/sub-menu-item/sub-menu-item.component';
+import { MenuItemData } from '../../token.types';
 import { MENU_ITEM_DATA, SUB_MENU_DATA } from '../../tokens';
 import { SubMenuChildItemProps } from '../../types';
+import { SubMenuStateMachineService } from './sub-menu-state-machine.service';
 
 @Component({
   selector: 'tfx-sub-menu',
@@ -16,12 +22,26 @@ import { SubMenuChildItemProps } from '../../types';
   templateUrl: './sub-menu.component.html',
   styleUrl: './sub-menu.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [SubMenuStateMachineService],
 })
-export class SubMenuComponent {
-  subMenu = inject(SUB_MENU_DATA);
+export class SubMenuComponent implements OnInit, OnDestroy {
+  subMenuData = inject(SUB_MENU_DATA);
+  menuProps = this.subMenuData.subMenu;
+  parentStateMachine = this.subMenuData.parentMenu.stateMachine;
+
   injector = inject(Injector);
 
+  stateMachine = inject(SubMenuStateMachineService);
+
   private injectors: Map<string, Injector> = new Map<string, Injector>();
+
+  ngOnInit(): void {
+    this.stateMachine.startStateMachine(this.subMenuData.subMenu);
+  }
+
+  ngOnDestroy(): void {
+    this.stateMachine.stopStateMachine();
+  }
 
   getInjector(item: SubMenuChildItemProps): Injector {
     let injector = this.injectors.get(item.id);
@@ -30,7 +50,15 @@ export class SubMenuComponent {
     }
 
     injector = Injector.create({
-      providers: [{ provide: MENU_ITEM_DATA, useValue: item }],
+      providers: [
+        {
+          provide: MENU_ITEM_DATA,
+          useValue: {
+            menuItem: item,
+            parentSubMenu: this,
+          } as MenuItemData,
+        },
+      ],
       parent: this.injector,
     });
     this.injectors.set(item.id, injector);
@@ -43,8 +71,16 @@ export class SubMenuComponent {
       case 'commandItem':
         return CommandItemComponent;
       case 'checkboxItem':
-        return CommandItemComponent;
+        return CheckboxItemComponent;
     }
-    return CommandItemComponent;
+    return SubMenuItemComponent;
+  }
+
+  onMouseEnter(item: SubMenuChildItemProps) {
+    this.stateMachine.onMouseEnter(item);
+  }
+
+  onMouseLeave(item: SubMenuChildItemProps) {
+    this.stateMachine.onMouseLeave(item);
   }
 }
