@@ -12,7 +12,12 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TopLevelItemComponent } from '../item-components/top-level-item/top-level-item.component';
-import { AppMenuConfig, AppMenuProps, TopLevelItemProps } from '../types';
+import {
+  AppMenuConfig,
+  AppMenuProps,
+  ExecutableItemProps,
+  TopLevelItemProps,
+} from '../types';
 import { topupAppMenuConfig } from '../utils/topup-app-menu-config';
 import { AppMenuStateMachineService } from './app-menu-state-machine.service';
 import { AppMenuSubMenuService } from './app-menu-sub-menu.service';
@@ -94,5 +99,13 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   onMouseClick(item: TopLevelItemProps) {
     this.stateMachine.onMouseClick(item);
+  }
+
+  onExecuteCommand(item: ExecutableItemProps) {
+    // Notify state machine a command is to be executed
+    this.stateMachine.onExecuteCommand();
+
+    // Execute the command
+    item.exec();
   }
 }

@@ -1,13 +1,13 @@
-<div *ngIf="vm$ | async as vm" (click)="itemClick()">
+<div *ngIf="vm$ | async as vm" (click)="itemClick(vm.disabled)">
   <div
     class="menu-item"
     [style.backgroundColor]="vm.backgroundColor"
     [style.color]="vm.color"
-    [style.cursor]="'pointer'"
+    [style.cursor]="vm.cursor"
   >
     <div class="icon"></div>
     <div class="label-shortcut">
-      <div class="item-artifact no_text-select">{{ menuItem.label }}</div>
+      <div class="item-artifact no-text-select">{{ menuItem.label }}</div>
       <div class="item-sublabel no-text-select">{{ menuItem.subLabel }}</div>
     </div>
     <div></div>

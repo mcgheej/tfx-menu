@@ -26,6 +26,7 @@ export class CommandItemComponent {
     map(([activeId, disabled, visible]) => {
       const menuOptions = this.parentMenu.menuProps.options;
       return {
+        disabled,
         color: disabled
           ? menuOptions.disabledItemTextColor
           : menuOptions.itemTextColor,
@@ -39,7 +40,10 @@ export class CommandItemComponent {
     })
   );
 
-  itemClick() {
-    this.menuItem.exec();
+  itemClick(disabled: boolean) {
+    if (!disabled) {
+      // this.menuItem.exec();
+      this.parentMenu.onExecuteCommand(this.menuItem);
+    }
   }
 }

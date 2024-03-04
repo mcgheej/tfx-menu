@@ -1,10 +1,10 @@
-<div *ngIf="vm$ | async as vm" (click)="itemClick()">
+<div *ngIf="vm$ | async as vm" (click)="itemClick(vm.disabled)">
   <div
     *ngIf="vm.visible"
     class="menu-item"
     [style.backgroundColor]="vm.backgroundColor"
     [style.color]="vm.color"
-    [style.cursor]="'pointer'"
+    [style.cursor]="vm.cursor"
   >
     <div *ngIf="vm.checked; else notChecked" class="icon">
       <span class="material-icons icon-symbol">check</span>

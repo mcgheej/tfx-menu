@@ -12,7 +12,7 @@ import { CommandItemComponent } from '../../item-components/command-item/command
 import { SubMenuItemComponent } from '../../item-components/sub-menu-item/sub-menu-item.component';
 import { MenuItemData } from '../../token.types';
 import { MENU_ITEM_DATA, SUB_MENU_DATA } from '../../tokens';
-import { SubMenuChildItemProps } from '../../types';
+import { ExecutableItemProps, SubMenuChildItemProps } from '../../types';
 import { SubMenuStateMachineService } from './sub-menu-state-machine.service';
 
 @Component({
@@ -27,7 +27,7 @@ import { SubMenuStateMachineService } from './sub-menu-state-machine.service';
 export class SubMenuComponent implements OnInit, OnDestroy {
   subMenuData = inject(SUB_MENU_DATA);
   menuProps = this.subMenuData.subMenu;
-  parentStateMachine = this.subMenuData.parentMenu.stateMachine;
+  parentMenu = this.subMenuData.parentMenu;
 
   injector = inject(Injector);
 
@@ -82,5 +82,13 @@ export class SubMenuComponent implements OnInit, OnDestroy {
 
   onMouseLeave(item: SubMenuChildItemProps) {
     this.stateMachine.onMouseLeave(item);
+  }
+
+  onExecuteCommand(item: ExecutableItemProps) {
+    // Send item.execute event to sub-menu state machine
+    this.stateMachine.onExecuteCommand();
+
+    // Notify parent menu a command has been executed.
+    this.parentMenu.onExecuteCommand(item);
   }
 }

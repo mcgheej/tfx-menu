@@ -127,6 +127,7 @@ export const shortMenu: AppMenuConfig = {
               label: 'Paste',
               subLabel: 'Ctrl+V',
               exec: () => console.log('Execute Edit>Paste command'),
+              disabled: of(true),
             } as CommandItemConfig,
           ],
           [

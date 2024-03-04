@@ -27,6 +27,7 @@ export class CheckboxItemComponent {
     map(([activeId, disabled, visible, checked]) => {
       const menuOptions = this.parentMenu.menuProps.options;
       return {
+        disabled,
         color: disabled
           ? menuOptions.disabledItemTextColor
           : menuOptions.itemTextColor,
@@ -41,7 +42,9 @@ export class CheckboxItemComponent {
     })
   );
 
-  itemClick() {
-    this.menuItem.exec();
+  itemClick(disabled: boolean) {
+    if (!disabled) {
+      this.parentMenu.onExecuteCommand(this.menuItem);
+    }
   }
 }

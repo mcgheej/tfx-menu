@@ -263,6 +263,8 @@ export interface TopLevelItemConfig {
 /**
  *
  */
+export type ExecutableItemProps = CommandItemProps | CheckboxItemProps;
+
 export type SubMenuChildItemProps =
   | CommandItemProps
   | CheckboxItemProps

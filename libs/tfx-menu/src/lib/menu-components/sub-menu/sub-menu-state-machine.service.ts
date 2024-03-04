@@ -58,4 +58,10 @@ export class SubMenuStateMachineService {
       this.subMenuActor.send({ type: 'item.leave', item });
     }
   }
+
+  onExecuteCommand() {
+    if (this.subMenuActor) {
+      this.subMenuActor.send({ type: 'item.execute' });
+    }
+  }
 }
