@@ -1,13 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, QueryList, inject } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 import { Actor, createActor } from 'xstate';
-import { AppMenuProps, TopLevelItemProps } from '../types';
-import { AppMenuSubMenuService } from './app-menu-sub-menu.service';
+import { TopLevelItemComponent } from '../item-components/top-level-item/top-level-item.component';
+import { PopupService } from '../popup-service/popup-service';
+import {
+  AppMenuProps,
+  ItemComponentCollection,
+  TopLevelItemProps,
+} from '../types';
+import { appMenuMachine, noItemActive } from './+xstate/app-menu.xstate';
 import { AppMenuComponent } from './app-menu.component';
-import { appMenuMachine, noItemActive } from './app-menu.xstate';
 
 @Injectable()
 export class AppMenuStateMachineService {
+  private popupService = inject(PopupService);
+
   private activeItemIdSubject$ = new BehaviorSubject<string>(noItemActive);
   activeItemId$ = this.activeItemIdSubject$
     .asObservable()
@@ -17,23 +24,25 @@ export class AppMenuStateMachineService {
 
   startStateMachine(
     appMenu: AppMenuProps,
-    parentMenu: AppMenuComponent,
-    subMenuController: AppMenuSubMenuService
+    parentMenu: AppMenuComponent
+    // subMenuController: AppMenuSubMenuService
   ) {
     this.stopStateMachine();
     this.appMenuActor = createActor(appMenuMachine, {
       input: {
         appMenu: appMenu,
+        appMenuCmp: parentMenu,
+        popupService: this.popupService,
       },
     });
     this.appMenuActor.start();
     this.appMenuActor.subscribe((snapshot) => {
       const item = snapshot.context.activeItem;
       this.activeItemIdSubject$.next(item ? item.id : noItemActive);
-      subMenuController.checkExpandedItem(
-        snapshot.context.expandedItem,
-        parentMenu
-      );
+      // subMenuController.checkExpandedItem(
+      //   snapshot.context.expandedItem,
+      //   parentMenu
+      // );
     });
   }
 
@@ -41,6 +50,14 @@ export class AppMenuStateMachineService {
     if (this.appMenuActor) {
       this.appMenuActor.stop();
       this.appMenuActor = undefined;
+    }
+  }
+
+  setItemComponents(components: QueryList<TopLevelItemComponent>) {
+    if (this.appMenuActor) {
+      const itemCmps: ItemComponentCollection = {};
+      components.map((cmp) => (itemCmps[cmp.item.id] = cmp));
+      this.appMenuActor.send({ type: 'menu.itemComponentsChange', itemCmps });
     }
   }
 
@@ -65,12 +82,6 @@ export class AppMenuStateMachineService {
   onExecuteCommand() {
     if (this.appMenuActor) {
       this.appMenuActor.send({ type: 'item.execute' });
-    }
-  }
-
-  onBackdropClick() {
-    if (this.appMenuActor) {
-      this.appMenuActor.send({ type: 'backdrop.click' });
     }
   }
 }

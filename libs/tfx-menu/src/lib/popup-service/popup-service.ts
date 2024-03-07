@@ -15,7 +15,7 @@ import {
 import { SubMenuComponent } from '../menu-components/sub-menu/sub-menu.component';
 import { MenuComponent, SubMenuData } from '../token.types';
 import { SUB_MENU_DATA } from '../tokens';
-import { SubMenuChildItemProps, SubMenuProps } from '../types';
+import { ExecutableItemProps, SubMenuProps } from '../types';
 import { PopupRef } from './popup-ref';
 
 export interface PopupComponentOptions {
@@ -50,10 +50,10 @@ export class PopupService {
     subMenu: SubMenuProps,
     parentMenu: MenuComponent,
     config: PopupComponentOptions
-  ): PopupRef<SubMenuChildItemProps> {
+  ): PopupRef<ExecutableItemProps> {
     const menuConfig = { ...DEFAULT_CONFIG, ...config };
     const overlayRef = this.createOverlay(menuConfig);
-    const menuRef = new PopupRef<SubMenuChildItemProps>(overlayRef);
+    const menuRef = new PopupRef<ExecutableItemProps>(overlayRef);
     this.attachSubMenuContainer(overlayRef, subMenu, parentMenu, menuRef);
 
     overlayRef.backdropClick().subscribe(() => {
@@ -75,7 +75,7 @@ export class PopupService {
     overlayRef: OverlayRef,
     subMenu: SubMenuProps,
     parentMenu: MenuComponent,
-    popupRef: PopupRef<SubMenuChildItemProps>
+    popupRef: PopupRef<ExecutableItemProps>
   ): SubMenuComponent {
     const injector = this.createInjector(subMenu, parentMenu, popupRef);
     const containerPortal = new ComponentPortal(
@@ -111,7 +111,7 @@ export class PopupService {
   private createInjector(
     subMenu: SubMenuProps,
     parentMenu: MenuComponent,
-    menuRef: PopupRef<SubMenuChildItemProps>
+    menuRef: PopupRef<ExecutableItemProps>
   ): Injector {
     return Injector.create({
       parent: this.injector,

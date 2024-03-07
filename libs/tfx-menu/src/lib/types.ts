@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+import { TopLevelItemComponent } from './item-components/top-level-item/top-level-item.component';
 import { PartPartial } from './utils/part-partial.type';
 
 /**
@@ -265,6 +266,8 @@ export interface TopLevelItemConfig {
  */
 export type ExecutableItemProps = CommandItemProps | CheckboxItemProps;
 
+export type ExpandableItemProps = TopLevelItemProps | SubMenuItemProps;
+
 export type SubMenuChildItemProps =
   | CommandItemProps
   | CheckboxItemProps
@@ -278,3 +281,7 @@ export type SubMenuChildItemConfig =
   | SubMenuItemConfig;
 
 export type SubMenuGroupConfig = SubMenuChildItemConfig[];
+
+export interface ItemComponentCollection {
+  [id: string]: TopLevelItemComponent; // TODO - needs modification to support sub-menus
+}

@@ -20,7 +20,6 @@ import {
 } from '../types';
 import { topupAppMenuConfig } from '../utils/topup-app-menu-config';
 import { AppMenuStateMachineService } from './app-menu-state-machine.service';
-import { AppMenuSubMenuService } from './app-menu-sub-menu.service';
 
 @Component({
   selector: 'tfx-app-menu',
@@ -29,7 +28,7 @@ import { AppMenuSubMenuService } from './app-menu-sub-menu.service';
   templateUrl: './app-menu.component.html',
   styleUrl: './app-menu.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [AppMenuStateMachineService, AppMenuSubMenuService],
+  providers: [AppMenuStateMachineService],
 })
 export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
   @Input({
@@ -42,7 +41,6 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
   viewChildren!: QueryList<TopLevelItemComponent>;
 
   stateMachine = inject(AppMenuStateMachineService);
-  private subMenuController = inject(AppMenuSubMenuService);
 
   private itemComponentsSubscription: Subscription | null = null;
   private backdropClickSubscription: Subscription | null = null;
@@ -51,24 +49,16 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   ngOnChanges(): void {
     this.stateMachine.stopStateMachine();
-    this.stateMachine.startStateMachine(
-      this.menu,
-      this,
-      this.subMenuController
-    );
+    this.stateMachine.startStateMachine(this.menu, this);
   }
 
   ngAfterViewInit(): void {
-    this.subMenuController.setItemComponents(this.viewChildren);
+    this.stateMachine.setItemComponents(this.viewChildren);
     this.itemComponentsSubscription = this.viewChildren.changes.subscribe(
       (children) => {
-        this.subMenuController.setItemComponents(children);
+        this.stateMachine.setItemComponents(children);
       }
     );
-    this.backdropClickSubscription =
-      this.subMenuController.backdropClick$.subscribe(() =>
-        this.stateMachine.onBackdropClick()
-      );
   }
 
   ngOnDestroy(): void {

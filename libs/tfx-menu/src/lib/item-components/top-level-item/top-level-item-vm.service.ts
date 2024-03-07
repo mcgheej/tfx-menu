@@ -16,7 +16,7 @@ import {
   distinctUntilChanged,
   map,
 } from 'rxjs';
-import { noItemActive } from '../../app-menu/app-menu.xstate';
+import { noItemActive } from '../../app-menu/+xstate/app-menu.xstate';
 import { MenuOptionsProps, TopLevelItemProps } from '../../types';
 import { APP_MENU_DEFAULT_OPTIONS } from '../../utils/menu-defaults';
 

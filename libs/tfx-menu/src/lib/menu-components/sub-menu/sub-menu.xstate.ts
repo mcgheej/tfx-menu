@@ -124,6 +124,11 @@ export const subMenuMachine = setup({
           target: 'activeItem',
           reenter: true,
         },
+        on: {
+          'item.execute': {
+            target: '#subMenu.noActiveItem',
+          },
+        },
       },
       entry: [
         {
@@ -143,11 +148,11 @@ export const subMenuMachine = setup({
       ],
       states: {
         activeMenuItem: {
-          on: {
-            'item.execute': {
-              target: '#subMenu.noActiveItem',
-            },
-          },
+          // on: {
+          //   'item.execute': {
+          //     target: '#subMenu.noActiveItem',
+          //   },
+          // },
           always: {
             target: 'activeSubMenuItem',
             guard: {
@@ -157,11 +162,11 @@ export const subMenuMachine = setup({
         },
         activeSubMenuItem: {
           initial: 'waitToOpen',
-          on: {
-            'item.execute': {
-              target: '#subMenu.noActiveItem',
-            },
-          },
+          // on: {
+          //   'item.execute': {
+          //     target: '#subMenu.noActiveItem',
+          //   },
+          // },
           states: {
             waitToOpen: {
               after: {
