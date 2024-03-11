@@ -19,6 +19,7 @@ export const shortMenu: AppMenuConfig = {
       type: 'topLevelItem',
       label: 'File',
       subMenu: {
+        name: 'File sub-menu',
         type: 'subMenu',
         itemGroups: [
           [
@@ -26,6 +27,7 @@ export const shortMenu: AppMenuConfig = {
               type: 'subMenuItem',
               label: 'New',
               subMenu: {
+                name: 'File>New sub-menu',
                 type: 'subMenu',
                 itemGroups: [
                   [

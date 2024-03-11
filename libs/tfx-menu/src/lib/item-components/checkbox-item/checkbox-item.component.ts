@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+} from '@angular/core';
 import { combineLatest, map } from 'rxjs';
 import { MENU_ITEM_DATA } from '../../tokens';
 import { CheckboxItemProps } from '../../types';
@@ -14,17 +19,19 @@ import { CheckboxItemProps } from '../../types';
 })
 export class CheckboxItemComponent {
   menuItemData = inject(MENU_ITEM_DATA);
+  elementRef = inject(ElementRef);
+
   menuItem = this.menuItemData.menuItem as CheckboxItemProps;
   parentMenu = this.menuItemData.parentSubMenu;
   parentStateMachine = this.parentMenu.stateMachine;
 
   vm$ = combineLatest([
-    this.parentStateMachine.activeItemId$,
+    this.parentStateMachine.highlightedItemId$,
     this.menuItem.disabled,
     this.menuItem.visible,
     this.menuItem.checked,
   ]).pipe(
-    map(([activeId, disabled, visible, checked]) => {
+    map(([highlightedItemId, disabled, visible, checked]) => {
       const menuOptions = this.parentMenu.menuProps.options;
       return {
         disabled,
@@ -32,7 +39,7 @@ export class CheckboxItemComponent {
           ? menuOptions.disabledItemTextColor
           : menuOptions.itemTextColor,
         backgroundColor:
-          activeId === this.menuItem.id && !disabled
+          highlightedItemId === this.menuItem.id && !disabled
             ? menuOptions.itemHighlightColor
             : menuOptions.itemBackgroundColor,
         cursor: disabled ? 'default' : 'pointer',

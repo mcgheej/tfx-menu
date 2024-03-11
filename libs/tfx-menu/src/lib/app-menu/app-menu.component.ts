@@ -10,7 +10,6 @@ import {
   ViewChildren,
   inject,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { TopLevelItemComponent } from '../item-components/top-level-item/top-level-item.component';
 import {
   AppMenuConfig,
@@ -42,9 +41,6 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   stateMachine = inject(AppMenuStateMachineService);
 
-  private itemComponentsSubscription: Subscription | null = null;
-  private backdropClickSubscription: Subscription | null = null;
-
   activeItemId$ = this.stateMachine.activeItemId$;
 
   ngOnChanges(): void {
@@ -54,20 +50,9 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.stateMachine.setItemComponents(this.viewChildren);
-    this.itemComponentsSubscription = this.viewChildren.changes.subscribe(
-      (children) => {
-        this.stateMachine.setItemComponents(children);
-      }
-    );
   }
 
   ngOnDestroy(): void {
-    if (this.itemComponentsSubscription) {
-      this.itemComponentsSubscription.unsubscribe();
-    }
-    if (this.backdropClickSubscription) {
-      this.backdropClickSubscription.unsubscribe();
-    }
     this.stateMachine.stopStateMachine();
   }
 
@@ -98,4 +83,7 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
     // Execute the command
     item.exec();
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onEnterChildSubMenu() {}
 }

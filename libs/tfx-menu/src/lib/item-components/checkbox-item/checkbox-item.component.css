@@ -1,17 +1,13 @@
 .menu-item {
   display: grid;
-  /* grid-template-columns: 30px 1fr 30px; */
   grid-template-columns: 2.3077em 1fr 2.3077em;
-  /* grid-template-rows: 20px; */
   grid-template-rows: 1.5385em;
 }
 
 .label-shortcut {
   display: grid;
   grid-template-columns: minmax(150px, max-content) 1fr;
-  /* grid-template-rows: 20px; */
   grid-template-rows: 1.5385em;
-  /* column-gap: 5px; */
   column-gap: 0.3846em;
 }
 
@@ -31,7 +27,6 @@
 }
 
 .icon-symbol {
-  /* font-size: 18px; */
   font-size: 1em;
   align-self: center;
   justify-self: center;

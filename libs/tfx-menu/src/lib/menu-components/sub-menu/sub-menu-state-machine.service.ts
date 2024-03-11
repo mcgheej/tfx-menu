@@ -1,15 +1,20 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
+import { Injectable, QueryList, inject } from '@angular/core';
+import { BehaviorSubject, Subscription, distinctUntilChanged } from 'rxjs';
 import { Actor, createActor } from 'xstate';
+import { ItemComponentCollection } from '../../item-component-collection';
+import { ItemContainerComponent } from '../../item-components/item-container/item-container.component';
+import { PopupService } from '../../popup-service/popup-service';
 import { SubMenuChildItemProps, SubMenuProps } from '../../types';
 import {
   noItemActive,
   noItemHighlighted,
   subMenuMachine,
-} from './sub-menu.xstate';
+} from './+xstate/sub-menu.xstate';
+import { SubMenuComponent } from './sub-menu.component';
 
 @Injectable()
 export class SubMenuStateMachineService {
+  private popupService = inject(PopupService);
   private activeItemIdSubject$ = new BehaviorSubject<string>(noItemActive);
   activeItemId$ = this.activeItemIdSubject$
     .asObservable()
@@ -24,11 +29,15 @@ export class SubMenuStateMachineService {
 
   private subMenuActor: Actor<typeof subMenuMachine> | undefined;
 
-  startStateMachine(subMenu: SubMenuProps) {
+  private itemComponentsSubscription: Subscription | null = null;
+
+  startStateMachine(subMenu: SubMenuProps, subMenuCmp: SubMenuComponent) {
     this.stopStateMachine();
     this.subMenuActor = createActor(subMenuMachine, {
       input: {
         subMenu: subMenu,
+        subMenuCmp,
+        popupService: this.popupService,
       },
     });
     this.subMenuActor.start();
@@ -41,9 +50,28 @@ export class SubMenuStateMachineService {
   }
 
   stopStateMachine() {
+    if (this.itemComponentsSubscription) {
+      this.itemComponentsSubscription.unsubscribe();
+      this.itemComponentsSubscription = null;
+    }
     if (this.subMenuActor) {
       this.subMenuActor.stop();
       this.subMenuActor = undefined;
+    }
+  }
+
+  setItemComponents(components: QueryList<ItemContainerComponent>) {
+    this.onItemCmpsChange(components);
+    this.itemComponentsSubscription = components.changes.subscribe(
+      (changedComponents) => {
+        this.onItemCmpsChange(changedComponents); // TODO - what happens if only one item changed
+      }
+    );
+  }
+
+  onEnterSubMenu() {
+    if (this.subMenuActor) {
+      this.subMenuActor.send({ type: 'childSubMenu.enter' });
     }
   }
 
@@ -62,6 +90,17 @@ export class SubMenuStateMachineService {
   onExecuteCommand() {
     if (this.subMenuActor) {
       this.subMenuActor.send({ type: 'item.execute' });
+    }
+  }
+
+  private onItemCmpsChange(components: QueryList<ItemContainerComponent>) {
+    if (this.subMenuActor) {
+      const itemCmps: ItemComponentCollection = {};
+      components.map((cmp) => (itemCmps[cmp.item.id] = cmp));
+      this.subMenuActor.send({
+        type: 'subMenu.itemComponentsChange',
+        itemCmps,
+      });
     }
   }
 }

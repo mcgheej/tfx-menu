@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+} from '@angular/core';
 import { combineLatest, map } from 'rxjs';
 import { MENU_ITEM_DATA } from '../../tokens';
 import { SubMenuItemProps } from '../../types';
@@ -14,23 +19,26 @@ import { SubMenuItemProps } from '../../types';
 })
 export class SubMenuItemComponent {
   menuItemData = inject(MENU_ITEM_DATA);
+
+  elementRef = inject(ElementRef);
+
   menuItem = this.menuItemData.menuItem as SubMenuItemProps;
   parentMenu = this.menuItemData.parentSubMenu;
   parentStateMachine = this.parentMenu.stateMachine;
 
   vm$ = combineLatest([
-    this.parentStateMachine.activeItemId$,
+    this.parentStateMachine.highlightedItemId$,
     this.menuItem.disabled,
     this.menuItem.visible,
   ]).pipe(
-    map(([activeId, disabled, visible]) => {
+    map(([highlightedItemId, disabled, visible]) => {
       const menuOptions = this.parentMenu.menuProps.options;
       return {
         color: disabled
           ? menuOptions.disabledItemTextColor
           : menuOptions.itemTextColor,
         backgroundColor:
-          activeId === this.menuItem.id && !disabled
+          highlightedItemId === this.menuItem.id && !disabled
             ? menuOptions.itemHighlightColor
             : menuOptions.itemBackgroundColor,
         cursor: disabled ? 'default' : 'pointer',

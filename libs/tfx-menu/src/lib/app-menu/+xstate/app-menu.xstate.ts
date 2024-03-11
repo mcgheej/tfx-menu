@@ -1,10 +1,7 @@
 import { assign, setup } from 'xstate';
+import { ItemComponentCollection } from '../../item-component-collection';
 import { PopupService } from '../../popup-service/popup-service';
-import {
-  AppMenuProps,
-  ItemComponentCollection,
-  TopLevelItemProps,
-} from '../../types';
+import { AppMenuProps, TopLevelItemProps } from '../../types';
 import { AppMenuComponent } from '../app-menu.component';
 import { PopupCallbackInputs, popupLogic } from './popup.xstate';
 
@@ -17,7 +14,6 @@ export interface AppMenuContext {
   menuItemCmps: ItemComponentCollection;
   popupService: PopupService;
   activeItem: TopLevelItemProps | null;
-  expandedItem: TopLevelItemProps | null;
 }
 
 export type AppMenuEvents =
@@ -100,6 +96,10 @@ export const appMenuMachine = setup({
         type: 'object',
         properties: {},
       },
+      'menu.itemComponentsChange': {
+        type: 'object',
+        properties: {},
+      },
     },
   },
 }).createMachine({
@@ -110,7 +110,6 @@ export const appMenuMachine = setup({
     menuItemCmps: {},
     popupService: input.popupService,
     activeItem: null,
-    expandedItem: null,
   }),
   id: 'appMenu',
   initial: 'notActive',

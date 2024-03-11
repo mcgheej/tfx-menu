@@ -1,14 +1,18 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Injector,
   OnDestroy,
   OnInit,
+  QueryList,
+  ViewChildren,
   inject,
 } from '@angular/core';
 import { CheckboxItemComponent } from '../../item-components/checkbox-item/checkbox-item.component';
 import { CommandItemComponent } from '../../item-components/command-item/command-item.component';
+import { ItemContainerComponent } from '../../item-components/item-container/item-container.component';
 import { SubMenuItemComponent } from '../../item-components/sub-menu-item/sub-menu-item.component';
 import { MenuItemData } from '../../token.types';
 import { MENU_ITEM_DATA, SUB_MENU_DATA } from '../../tokens';
@@ -18,16 +22,19 @@ import { SubMenuStateMachineService } from './sub-menu-state-machine.service';
 @Component({
   selector: 'tfx-sub-menu',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ItemContainerComponent],
   templateUrl: './sub-menu.component.html',
   styleUrl: './sub-menu.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [SubMenuStateMachineService],
 })
-export class SubMenuComponent implements OnInit, OnDestroy {
+export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   subMenuData = inject(SUB_MENU_DATA);
   menuProps = this.subMenuData.subMenu;
   parentMenu = this.subMenuData.parentMenu;
+
+  @ViewChildren(ItemContainerComponent)
+  viewChildren!: QueryList<ItemContainerComponent>;
 
   injector = inject(Injector);
 
@@ -36,7 +43,11 @@ export class SubMenuComponent implements OnInit, OnDestroy {
   private injectors: Map<string, Injector> = new Map<string, Injector>();
 
   ngOnInit(): void {
-    this.stateMachine.startStateMachine(this.subMenuData.subMenu);
+    this.stateMachine.startStateMachine(this.subMenuData.subMenu, this);
+  }
+
+  ngAfterViewInit(): void {
+    this.stateMachine.setItemComponents(this.viewChildren);
   }
 
   ngOnDestroy(): void {
@@ -74,6 +85,14 @@ export class SubMenuComponent implements OnInit, OnDestroy {
         return CheckboxItemComponent;
     }
     return SubMenuItemComponent;
+  }
+
+  onEnterSubMenu() {
+    this.parentMenu.onEnterChildSubMenu();
+  }
+
+  onEnterChildSubMenu() {
+    this.stateMachine.onEnterSubMenu();
   }
 
   onMouseEnter(item: SubMenuChildItemProps) {

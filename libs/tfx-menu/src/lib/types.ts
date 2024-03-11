@@ -1,5 +1,4 @@
 import { Observable } from 'rxjs';
-import { TopLevelItemComponent } from './item-components/top-level-item/top-level-item.component';
 import { PartPartial } from './utils/part-partial.type';
 
 /**
@@ -124,6 +123,7 @@ export interface ContextMenuConfig {
 
 export interface SubMenuProps {
   id: string;
+  name: string;
   options: MenuOptionsProps;
   itemGroups: SubMenuGroupProps[];
   type: 'subMenu';
@@ -131,6 +131,7 @@ export interface SubMenuProps {
 
 export interface SubMenuConfig {
   id?: string;
+  name?: string;
   options?: MenuOptionsConfig;
   itemGroups?: SubMenuGroupConfig[];
   type: 'subMenu';
@@ -281,7 +282,3 @@ export type SubMenuChildItemConfig =
   | SubMenuItemConfig;
 
 export type SubMenuGroupConfig = SubMenuChildItemConfig[];
-
-export interface ItemComponentCollection {
-  [id: string]: TopLevelItemComponent; // TODO - needs modification to support sub-menus
-}

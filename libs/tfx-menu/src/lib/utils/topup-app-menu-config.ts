@@ -68,12 +68,14 @@ function topupSubMenuConfig(subMenu: SubMenuConfig | undefined): SubMenuProps {
   return subMenu
     ? {
         id: subMenu.id ?? nanoid(),
+        name: subMenu.name ?? '',
         options: topupMenuOptions(subMenu.options, SUB_MENU_DEFAULT_OPTIONS),
         itemGroups: topupItemGroupsConfig(subMenu.itemGroups),
         type: 'subMenu',
       }
     : {
         id: nanoid(),
+        name: '',
         options: { ...SUB_MENU_DEFAULT_OPTIONS },
         itemGroups: [],
         type: 'subMenu',

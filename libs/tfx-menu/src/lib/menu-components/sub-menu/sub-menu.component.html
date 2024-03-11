@@ -3,15 +3,18 @@
   [style.color]="menuProps.options.itemTextColor"
   [style.backgroundColor]="menuProps.options.itemBackgroundColor"
   [style.fontSize.px]="menuProps.options.fontSizePixels"
+  (mouseenter)="onEnterSubMenu()"
 >
   @for (group of menuProps.itemGroups; track $index; let isLast = $last) {
   <div class="menu-group">
     @for (item of group; track item.id) {
-    <div (mouseenter)="onMouseEnter(item)" (mouseleave)="onMouseLeave(item)">
-      <ng-container
-        *ngComponentOutlet="getComponentType(item); injector: getInjector(item)"
-      ></ng-container>
-    </div>
+    <tfx-item-container
+      [item]="item"
+      [componentType]="getComponentType(item)"
+      [injector]="getInjector(item)"
+      (mouseenter)="onMouseEnter(item)"
+      (mouseleave)="onMouseLeave(item)"
+    ></tfx-item-container>
     }
   </div>
   @if (!isLast) {
