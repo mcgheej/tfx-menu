@@ -1,5 +1,5 @@
 import { Injectable, QueryList, inject } from '@angular/core';
-import { BehaviorSubject, Subscription, distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 import { Actor, createActor } from 'xstate';
 import { ItemComponentCollection } from '../../item-component-collection';
 import { ItemContainerComponent } from '../../item-components/item-container/item-container.component';
@@ -29,8 +29,6 @@ export class SubMenuStateMachineService {
 
   private subMenuActor: Actor<typeof subMenuMachine> | undefined;
 
-  private itemComponentsSubscription: Subscription | null = null;
-
   startStateMachine(subMenu: SubMenuProps, subMenuCmp: SubMenuComponent) {
     this.stopStateMachine();
     this.subMenuActor = createActor(subMenuMachine, {
@@ -50,10 +48,6 @@ export class SubMenuStateMachineService {
   }
 
   stopStateMachine() {
-    if (this.itemComponentsSubscription) {
-      this.itemComponentsSubscription.unsubscribe();
-      this.itemComponentsSubscription = null;
-    }
     if (this.subMenuActor) {
       this.subMenuActor.stop();
       this.subMenuActor = undefined;
@@ -61,12 +55,14 @@ export class SubMenuStateMachineService {
   }
 
   setItemComponents(components: QueryList<ItemContainerComponent>) {
-    this.onItemCmpsChange(components);
-    this.itemComponentsSubscription = components.changes.subscribe(
-      (changedComponents) => {
-        this.onItemCmpsChange(changedComponents); // TODO - what happens if only one item changed
-      }
-    );
+    if (this.subMenuActor) {
+      const itemCmps: ItemComponentCollection = {};
+      components.map((cmp) => (itemCmps[cmp.item.id] = cmp));
+      this.subMenuActor.send({
+        type: 'subMenu.itemComponentsChange',
+        itemCmps,
+      });
+    }
   }
 
   onEnterSubMenu() {
@@ -90,17 +86,6 @@ export class SubMenuStateMachineService {
   onExecuteCommand() {
     if (this.subMenuActor) {
       this.subMenuActor.send({ type: 'item.execute' });
-    }
-  }
-
-  private onItemCmpsChange(components: QueryList<ItemContainerComponent>) {
-    if (this.subMenuActor) {
-      const itemCmps: ItemComponentCollection = {};
-      components.map((cmp) => (itemCmps[cmp.item.id] = cmp));
-      this.subMenuActor.send({
-        type: 'subMenu.itemComponentsChange',
-        itemCmps,
-      });
     }
   }
 }

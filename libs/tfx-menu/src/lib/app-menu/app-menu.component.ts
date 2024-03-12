@@ -10,6 +10,7 @@ import {
   ViewChildren,
   inject,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { TopLevelItemComponent } from '../item-components/top-level-item/top-level-item.component';
 import {
   AppMenuConfig,
@@ -43,6 +44,8 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   activeItemId$ = this.stateMachine.activeItemId$;
 
+  private itemComponentsSubscription: Subscription | null = null;
+
   ngOnChanges(): void {
     this.stateMachine.stopStateMachine();
     this.stateMachine.startStateMachine(this.menu, this);
@@ -50,9 +53,17 @@ export class AppMenuComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.stateMachine.setItemComponents(this.viewChildren);
+    this.itemComponentsSubscription = this.viewChildren.changes.subscribe(
+      (changes: QueryList<TopLevelItemComponent>) => {
+        this.stateMachine.setItemComponents(changes);
+      }
+    );
   }
 
   ngOnDestroy(): void {
+    if (this.itemComponentsSubscription) {
+      this.itemComponentsSubscription.unsubscribe();
+    }
     this.stateMachine.stopStateMachine();
   }
 

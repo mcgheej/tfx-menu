@@ -10,6 +10,7 @@ import {
   ViewChildren,
   inject,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CheckboxItemComponent } from '../../item-components/checkbox-item/checkbox-item.component';
 import { CommandItemComponent } from '../../item-components/command-item/command-item.component';
 import { ItemContainerComponent } from '../../item-components/item-container/item-container.component';
@@ -42,15 +43,25 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private injectors: Map<string, Injector> = new Map<string, Injector>();
 
+  private itemComponentsSubscription: Subscription | null = null;
+
   ngOnInit(): void {
     this.stateMachine.startStateMachine(this.subMenuData.subMenu, this);
   }
 
   ngAfterViewInit(): void {
     this.stateMachine.setItemComponents(this.viewChildren);
+    this.itemComponentsSubscription = this.viewChildren.changes.subscribe(
+      (changes: QueryList<ItemContainerComponent>) => {
+        this.stateMachine.setItemComponents(changes);
+      }
+    );
   }
 
   ngOnDestroy(): void {
+    if (this.itemComponentsSubscription) {
+      this.itemComponentsSubscription.unsubscribe();
+    }
     this.stateMachine.stopStateMachine();
   }
 

@@ -5,7 +5,8 @@ import {
   SubMenuConfig,
   SubMenuItemConfig,
 } from '@tfx-menu/tfx-menu';
-import { from, of } from 'rxjs';
+import { of } from 'rxjs';
+import { autoSave$, fileOpen$, toggleAutoSave, updateFileOpen } from './store';
 
 export const shortMenu: AppMenuConfig = {
   type: 'appMenu',
@@ -85,20 +86,30 @@ export const shortMenu: AppMenuConfig = {
               type: 'commandItem',
               label: 'Open',
               subLabel: 'Ctrl+O',
-              exec: () => console.log('Execute File>Open command'),
+              exec: () => {
+                console.log('Execute File>Open command');
+                updateFileOpen(true);
+              },
             } as CommandItemConfig,
             {
               type: 'checkboxItem',
-              label: 'Saved',
-              exec: () => console.log('Execute File>Saved checked'),
-              checked: of(true),
+              label: 'Auto Save',
+              visible: fileOpen$,
+              exec: () => {
+                console.log('Execute File>Auto Save checked');
+                toggleAutoSave();
+              },
+              checked: autoSave$,
             } as CheckboxItemConfig,
           ],
           [
             {
               type: 'commandItem',
               label: 'Exit',
-              exec: () => console.log('Execute File>Exit command'),
+              exec: () => {
+                console.log('Execute File>Exit command');
+                updateFileOpen(false);
+              },
             } as CommandItemConfig,
           ],
         ],
@@ -107,7 +118,7 @@ export const shortMenu: AppMenuConfig = {
     {
       type: 'topLevelItem',
       label: 'Edit',
-      disabled: from([false]),
+      visible: fileOpen$,
       subMenu: {
         type: 'subMenu',
         itemGroups: [
