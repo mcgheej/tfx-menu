@@ -77,36 +77,6 @@ export interface AppMenuConfig {
 }
 
 /**
- * ContextMenuProps
- * ================
- * This interface defines the properties required to describe a
- * context menu.
- *
- *  id:             Unique identifier
- *  options:        Properties that control the appearance of the
- *                  menu - defined by a MenuOptions configuration
- *                  object
- *  itemGroups:     several groups of menu items - items will be
- *                  a mix of command menu items, checkbox menu items,
- *                  and sub-menu menu items
- *  type:           Identifies the type of menu - always 'contextMenu'
- */
-
-export interface ContextMenuProps {
-  id: string;
-  options: MenuOptionsProps;
-  itemGroups: SubMenuGroupProps[];
-  type: 'contextMenu';
-}
-
-export interface ContextMenuConfig {
-  id?: string;
-  options?: MenuOptionsConfig;
-  itemGroups?: SubMenuGroupConfig[];
-  type: 'contextMenu';
-}
-
-/**
  * SubMenuProps
  * ============
  * This interface defines the properties required to describe a sub-menu.
@@ -135,6 +105,29 @@ export interface SubMenuConfig {
   options?: MenuOptionsConfig;
   itemGroups?: SubMenuGroupConfig[];
   type: 'subMenu';
+}
+
+/**
+ * ContextMenuProps
+ * ================
+ * This interface defines the properties required to describe a
+ * context menu.
+ *
+ *  id:             Unique identifier
+ *  options:        Properties that control the appearance of the
+ *                  menu - defined by a MenuOptions configuration
+ *                  object
+ *  itemGroups:     several groups of menu items - items will be
+ *                  a mix of command menu items, checkbox menu items,
+ *                  and sub-menu menu items
+ *  type:           Identifies the type of menu - always 'contextMenu'
+ */
+
+export interface ContextMenuProps extends Omit<SubMenuProps, 'type'> {
+  type: 'contextMenu';
+}
+export interface ContextMenuConfig extends Omit<SubMenuConfig, 'type'> {
+  type: 'contextMenu';
 }
 
 /**

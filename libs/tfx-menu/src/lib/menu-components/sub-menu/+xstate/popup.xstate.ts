@@ -3,12 +3,12 @@ import { fromCallback } from 'xstate';
 import { ItemComponentCollection } from '../../../item-component-collection';
 import { PopupRef } from '../../../popup-service/popup-ref';
 import { PopupService } from '../../../popup-service/popup-service';
-import { MenuComponent } from '../../../types/token.types';
+import { MenuParent } from '../../../types/token.types';
 import { ExecutableItemProps, ExpandableItemProps } from '../../../types/types';
 
 export interface PopupCallbackInputs {
   expandedItem: ExpandableItemProps;
-  parentMenuCmp: MenuComponent;
+  menuParent: MenuParent;
   parentMenuItemCmps: ItemComponentCollection;
   popupService: PopupService;
 }
@@ -19,13 +19,13 @@ export const popupLogic = fromCallback<
 >(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ({ sendBack, receive, input }) => {
-    const { expandedItem, parentMenuCmp, parentMenuItemCmps, popupService } =
+    const { expandedItem, menuParent, parentMenuItemCmps, popupService } =
       input;
     let menuRef: PopupRef<ExecutableItemProps> | null = null;
     if (expandedItem && parentMenuItemCmps[expandedItem.id]) {
       menuRef = openMenu(
         expandedItem,
-        parentMenuCmp,
+        menuParent,
         menuRef,
         parentMenuItemCmps[expandedItem.id].elementRef,
         popupService
@@ -47,7 +47,7 @@ const closeMenu = (menuRef: PopupRef<ExecutableItemProps> | null) => {
 
 const openMenu = (
   item: ExpandableItemProps,
-  parentMenuCmp: MenuComponent,
+  menuParent: MenuParent,
   menuRef: PopupRef<ExecutableItemProps> | null,
   anchorEl: ElementRef,
   popupService: PopupService
@@ -56,7 +56,7 @@ const openMenu = (
     closeMenu(menuRef);
   }
   // TODO - positions will be different for sub-menu parents
-  return popupService.openSubMenu(item.subMenu, parentMenuCmp, {
+  return popupService.openSubMenu(item.subMenu, menuParent, {
     hasBackdrop: false,
     associatedElement: anchorEl,
     positions: [

@@ -156,7 +156,7 @@ export const appMenuMachine = setup({
             input: ({ context }) => {
               return {
                 expandedItem: context.activeItem,
-                parentMenuCmp: context.appMenuCmp,
+                menuParent: context.appMenuCmp,
                 parentMenuItemCmps: context.menuItemCmps,
                 popupService: context.popupService,
               } as PopupCallbackInputs;

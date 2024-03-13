@@ -22,7 +22,7 @@ export class CheckboxItemComponent {
   elementRef = inject(ElementRef);
 
   menuItem = this.menuItemData.menuItem as CheckboxItemProps;
-  parentMenu = this.menuItemData.parentSubMenu;
+  parentMenu = this.menuItemData.subMenuParent;
   parentStateMachine = this.parentMenu.stateMachine;
 
   vm$ = combineLatest([

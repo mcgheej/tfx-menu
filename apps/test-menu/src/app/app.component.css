@@ -2,3 +2,7 @@
   height: 32px;
   width: 100vw;
 }
+
+button {
+  margin: 20px;
+}

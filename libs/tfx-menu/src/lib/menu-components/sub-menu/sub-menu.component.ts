@@ -32,7 +32,7 @@ import { SubMenuStateMachineService } from './sub-menu-state-machine.service';
 export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   subMenuData = inject(SUB_MENU_DATA);
   menuProps = this.subMenuData.subMenu;
-  parentMenu = this.subMenuData.parentMenu;
+  parentMenu = this.subMenuData.menuParent;
 
   @ViewChildren(ItemContainerComponent)
   viewChildren!: QueryList<ItemContainerComponent>;
@@ -77,7 +77,7 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
           provide: MENU_ITEM_DATA,
           useValue: {
             menuItem: item,
-            parentSubMenu: this,
+            subMenuParent: this,
           } as MenuItemData,
         },
       ],

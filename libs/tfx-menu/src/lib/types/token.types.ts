@@ -1,8 +1,12 @@
 import { AppMenuComponent } from '../menu-components/app-menu/app-menu.component';
+import { ContextMenuService } from '../menu-components/context-menu/context-menu.service';
 import { SubMenuComponent } from '../menu-components/sub-menu/sub-menu.component';
 import { SubMenuChildItemProps, SubMenuProps } from './types';
 
-export type MenuComponent = AppMenuComponent | SubMenuComponent;
+export type MenuParent =
+  | AppMenuComponent
+  | SubMenuComponent
+  | ContextMenuService;
 
 /**
  * SubMenuData
@@ -14,10 +18,10 @@ export type MenuComponent = AppMenuComponent | SubMenuComponent;
  */
 export interface SubMenuData {
   subMenu: SubMenuProps;
-  parentMenu: MenuComponent;
+  menuParent: MenuParent;
 }
 
 export interface MenuItemData {
   menuItem: SubMenuChildItemProps;
-  parentSubMenu: SubMenuComponent;
+  subMenuParent: SubMenuComponent;
 }

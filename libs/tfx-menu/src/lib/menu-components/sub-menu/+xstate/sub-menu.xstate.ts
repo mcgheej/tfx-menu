@@ -208,7 +208,7 @@ export const subMenuMachine = setup({
                 input: ({ context }) => {
                   return {
                     expandedItem: context.activeItem,
-                    parentMenuCmp: context.subMenuCmp,
+                    menuParent: context.subMenuCmp,
                     parentMenuItemCmps: context.menuItemCmps,
                     popupService: context.popupService,
                   } as PopupCallbackInputs;

@@ -11,6 +11,8 @@ import {
   CheckboxItemProps,
   CommandItemConfig,
   CommandItemProps,
+  ContextMenuConfig,
+  ContextMenuProps,
   MenuOptionsConfig,
   MenuOptionsProps,
   SubMenuConfig,
@@ -39,6 +41,18 @@ export function topupAppMenuConfig(config: AppMenuConfig): AppMenuProps {
     options: topupMenuOptions(config.options, APP_MENU_DEFAULT_OPTIONS),
     topLevelItems: topupTopLevelItemsConfig(config.topLevelItems),
     type: 'appMenu',
+  };
+}
+
+export function topupContextMenuConfig(
+  config: ContextMenuConfig
+): ContextMenuProps {
+  return {
+    id: config.id ?? nanoid(),
+    name: config.name ?? '',
+    options: topupMenuOptions(config.options, SUB_MENU_DEFAULT_OPTIONS),
+    itemGroups: topupItemGroupsConfig(config.itemGroups),
+    type: 'contextMenu',
   };
 }
 

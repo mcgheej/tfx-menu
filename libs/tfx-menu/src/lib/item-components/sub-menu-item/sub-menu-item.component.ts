@@ -23,7 +23,7 @@ export class SubMenuItemComponent {
   elementRef = inject(ElementRef);
 
   menuItem = this.menuItemData.menuItem as SubMenuItemProps;
-  parentMenu = this.menuItemData.parentSubMenu;
+  parentMenu = this.menuItemData.subMenuParent;
   parentStateMachine = this.parentMenu.stateMachine;
 
   vm$ = combineLatest([
