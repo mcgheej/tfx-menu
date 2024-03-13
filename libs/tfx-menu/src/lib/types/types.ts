@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { PartPartial } from './utils/part-partial.type';
+import { PartPartial } from './part-partial.type';
 
 /**
  * MenuCategory
@@ -274,11 +274,11 @@ export type SubMenuChildItemProps =
   | CheckboxItemProps
   | SubMenuItemProps;
 
-export type SubMenuGroupProps = SubMenuChildItemProps[];
-
 export type SubMenuChildItemConfig =
   | CommandItemConfig
   | CheckboxItemConfig
   | SubMenuItemConfig;
+
+export type SubMenuGroupProps = SubMenuChildItemProps[];
 
 export type SubMenuGroupConfig = SubMenuChildItemConfig[];

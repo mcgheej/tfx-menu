@@ -1,4 +1,4 @@
-import { MenuOptionsProps } from '../types';
+import { MenuOptionsProps } from '../types/types';
 
 export const APP_MENU_DEFAULT_OPTIONS: MenuOptionsProps = {
   itemTextColor: '#ffffff',

@@ -15,9 +15,9 @@ import { CheckboxItemComponent } from '../../item-components/checkbox-item/check
 import { CommandItemComponent } from '../../item-components/command-item/command-item.component';
 import { ItemContainerComponent } from '../../item-components/item-container/item-container.component';
 import { SubMenuItemComponent } from '../../item-components/sub-menu-item/sub-menu-item.component';
-import { MenuItemData } from '../../token.types';
-import { MENU_ITEM_DATA, SUB_MENU_DATA } from '../../tokens';
-import { ExecutableItemProps, SubMenuChildItemProps } from '../../types';
+import { MenuItemData } from '../../types/token.types';
+import { MENU_ITEM_DATA, SUB_MENU_DATA } from '../../types/tokens';
+import { ExecutableItemProps, SubMenuChildItemProps } from '../../types/types';
 import { SubMenuStateMachineService } from './sub-menu-state-machine.service';
 
 @Component({

@@ -3,8 +3,8 @@ import { fromCallback } from 'xstate';
 import { ItemComponentCollection } from '../../../item-component-collection';
 import { PopupRef } from '../../../popup-service/popup-ref';
 import { PopupService } from '../../../popup-service/popup-service';
-import { MenuComponent } from '../../../token.types';
-import { ExecutableItemProps, ExpandableItemProps } from '../../../types';
+import { MenuComponent } from '../../../types/token.types';
+import { ExecutableItemProps, ExpandableItemProps } from '../../../types/types';
 
 export interface PopupCallbackInputs {
   expandedItem: ExpandableItemProps;

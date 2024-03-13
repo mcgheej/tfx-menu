@@ -1,5 +1,5 @@
-import { AppMenuComponent } from './app-menu/app-menu.component';
-import { SubMenuComponent } from './menu-components/sub-menu/sub-menu.component';
+import { AppMenuComponent } from '../menu-components/app-menu/app-menu.component';
+import { SubMenuComponent } from '../menu-components/sub-menu/sub-menu.component';
 import { SubMenuChildItemProps, SubMenuProps } from './types';
 
 export type MenuComponent = AppMenuComponent | SubMenuComponent;

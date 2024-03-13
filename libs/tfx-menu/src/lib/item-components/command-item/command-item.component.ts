@@ -6,8 +6,8 @@ import {
   inject,
 } from '@angular/core';
 import { combineLatest, map } from 'rxjs';
-import { MENU_ITEM_DATA } from '../../tokens';
-import { CommandItemProps } from '../../types';
+import { MENU_ITEM_DATA } from '../../types/tokens';
+import { CommandItemProps } from '../../types/types';
 
 @Component({
   selector: 'tfx-command-item',

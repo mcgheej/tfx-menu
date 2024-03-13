@@ -1,7 +1,7 @@
 import { assign, setup } from 'xstate';
 import { ItemComponentCollection } from '../../../item-component-collection';
 import { PopupService } from '../../../popup-service/popup-service';
-import { SubMenuChildItemProps, SubMenuProps } from '../../../types';
+import { SubMenuChildItemProps, SubMenuProps } from '../../../types/types';
 import { SubMenuComponent } from '../sub-menu.component';
 import { PopupCallbackInputs, popupLogic } from './popup.xstate';
 

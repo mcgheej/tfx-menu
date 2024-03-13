@@ -1,6 +1,10 @@
 import { nanoid } from 'nanoid';
 import { from } from 'rxjs';
 import {
+  APP_MENU_DEFAULT_OPTIONS,
+  SUB_MENU_DEFAULT_OPTIONS,
+} from '../defaults/menu-defaults';
+import {
   AppMenuConfig,
   AppMenuProps,
   CheckboxItemConfig,
@@ -17,11 +21,7 @@ import {
   SubMenuProps,
   TopLevelItemConfig,
   TopLevelItemProps,
-} from '../types';
-import {
-  APP_MENU_DEFAULT_OPTIONS,
-  SUB_MENU_DEFAULT_OPTIONS,
-} from './menu-defaults';
+} from '../types/types';
 
 /**
  *

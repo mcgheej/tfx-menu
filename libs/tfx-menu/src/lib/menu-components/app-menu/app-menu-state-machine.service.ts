@@ -1,10 +1,10 @@
 import { Injectable, QueryList, inject } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 import { Actor, createActor } from 'xstate';
-import { ItemComponentCollection } from '../item-component-collection';
-import { TopLevelItemComponent } from '../item-components/top-level-item/top-level-item.component';
-import { PopupService } from '../popup-service/popup-service';
-import { AppMenuProps, TopLevelItemProps } from '../types';
+import { ItemComponentCollection } from '../../item-component-collection';
+import { TopLevelItemComponent } from '../../item-components/top-level-item/top-level-item.component';
+import { PopupService } from '../../popup-service/popup-service';
+import { AppMenuProps, TopLevelItemProps } from '../../types/types';
 import { appMenuMachine, noItemActive } from './+xstate/app-menu.xstate';
 import { AppMenuComponent } from './app-menu.component';
 

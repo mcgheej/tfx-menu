@@ -9,6 +9,6 @@ export {
   SubMenuGroupConfig,
   SubMenuItemConfig,
   TopLevelItemConfig,
-} from './lib/types';
+} from './lib/types/types';
 
-export * from './lib/app-menu/app-menu.component';
+export { AppMenuComponent } from './lib/menu-components/app-menu/app-menu.component';

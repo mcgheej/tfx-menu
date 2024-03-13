@@ -11,14 +11,14 @@ import {
   inject,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { TopLevelItemComponent } from '../item-components/top-level-item/top-level-item.component';
+import { TopLevelItemComponent } from '../../item-components/top-level-item/top-level-item.component';
 import {
   AppMenuConfig,
   AppMenuProps,
   ExecutableItemProps,
   TopLevelItemProps,
-} from '../types';
-import { topupAppMenuConfig } from '../utils/topup-app-menu-config';
+} from '../../types/types';
+import { topupAppMenuConfig } from '../../utils/topup-app-menu-config';
 import { AppMenuStateMachineService } from './app-menu-state-machine.service';
 
 @Component({

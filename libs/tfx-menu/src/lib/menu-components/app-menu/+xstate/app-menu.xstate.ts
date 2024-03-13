@@ -1,7 +1,7 @@
 import { assign, setup } from 'xstate';
-import { ItemComponentCollection } from '../../item-component-collection';
-import { PopupService } from '../../popup-service/popup-service';
-import { AppMenuProps, TopLevelItemProps } from '../../types';
+import { ItemComponentCollection } from '../../../item-component-collection';
+import { PopupService } from '../../../popup-service/popup-service';
+import { AppMenuProps, TopLevelItemProps } from '../../../types/types';
 import { AppMenuComponent } from '../app-menu.component';
 import { PopupCallbackInputs, popupLogic } from './popup.xstate';
 

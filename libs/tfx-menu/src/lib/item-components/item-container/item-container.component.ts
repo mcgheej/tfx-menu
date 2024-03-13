@@ -7,7 +7,7 @@ import {
   Input,
   inject,
 } from '@angular/core';
-import { SubMenuChildItemProps } from '../../types';
+import { SubMenuChildItemProps } from '../../types/types';
 
 @Component({
   selector: 'tfx-item-container',

@@ -4,7 +4,7 @@ import { Actor, createActor } from 'xstate';
 import { ItemComponentCollection } from '../../item-component-collection';
 import { ItemContainerComponent } from '../../item-components/item-container/item-container.component';
 import { PopupService } from '../../popup-service/popup-service';
-import { SubMenuChildItemProps, SubMenuProps } from '../../types';
+import { SubMenuChildItemProps, SubMenuProps } from '../../types/types';
 import {
   noItemActive,
   noItemHighlighted,

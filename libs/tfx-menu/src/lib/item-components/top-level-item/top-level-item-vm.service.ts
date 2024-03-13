@@ -16,9 +16,9 @@ import {
   distinctUntilChanged,
   map,
 } from 'rxjs';
-import { noItemActive } from '../../app-menu/+xstate/app-menu.xstate';
-import { MenuOptionsProps, TopLevelItemProps } from '../../types';
-import { APP_MENU_DEFAULT_OPTIONS } from '../../utils/menu-defaults';
+import { APP_MENU_DEFAULT_OPTIONS } from '../../defaults/menu-defaults';
+import { noItemActive } from '../../menu-components/app-menu/+xstate/app-menu.xstate';
+import { MenuOptionsProps, TopLevelItemProps } from '../../types/types';
 
 /**
  * This interface defines the properties required by a TopLevelItemComponent

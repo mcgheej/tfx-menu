@@ -13,9 +13,9 @@ import {
   inject,
 } from '@angular/core';
 import { SubMenuComponent } from '../menu-components/sub-menu/sub-menu.component';
-import { MenuComponent, SubMenuData } from '../token.types';
-import { SUB_MENU_DATA } from '../tokens';
-import { ExecutableItemProps, SubMenuProps } from '../types';
+import { MenuComponent, SubMenuData } from '../types/token.types';
+import { SUB_MENU_DATA } from '../types/tokens';
+import { ExecutableItemProps, SubMenuProps } from '../types/types';
 import { PopupRef } from './popup-ref';
 
 export interface PopupComponentOptions {
@@ -30,7 +30,7 @@ export interface PopupComponentOptions {
 export const DEFAULT_CONFIG: PopupComponentOptions = {
   hasBackdrop: true,
   backdropClass: 'transparent-backdrop',
-  panelClass: 'tm-menu-panel',
+  panelClass: 'tfx-menu-panel',
   positions: [
     {
       originX: 'center',

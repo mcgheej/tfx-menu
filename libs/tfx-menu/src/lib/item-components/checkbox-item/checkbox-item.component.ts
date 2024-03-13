@@ -6,8 +6,8 @@ import {
   inject,
 } from '@angular/core';
 import { combineLatest, map } from 'rxjs';
-import { MENU_ITEM_DATA } from '../../tokens';
-import { CheckboxItemProps } from '../../types';
+import { MENU_ITEM_DATA } from '../../types/tokens';
+import { CheckboxItemProps } from '../../types/types';
 
 @Component({
   selector: 'tfx-checkbox-item',

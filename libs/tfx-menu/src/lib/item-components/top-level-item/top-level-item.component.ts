@@ -11,7 +11,7 @@ import {
   SimpleChanges,
   inject,
 } from '@angular/core';
-import { MenuOptionsProps, TopLevelItemProps } from '../../types';
+import { MenuOptionsProps, TopLevelItemProps } from '../../types/types';
 import { TopLevelItemVmService } from './top-level-item-vm.service';
 
 @Component({
