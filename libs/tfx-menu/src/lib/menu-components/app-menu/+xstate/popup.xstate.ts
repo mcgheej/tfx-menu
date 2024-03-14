@@ -18,7 +18,7 @@ import { AnyEventObject, fromCallback } from 'xstate';
 import { ItemComponentCollection } from '../../../item-component-collection';
 import { PopupRef } from '../../../popup-service/popup-ref';
 import { PopupService } from '../../../popup-service/popup-service';
-import { MenuParent } from '../../../types/token.types';
+import { MenuParent } from '../../../types/menu-parent.type';
 import { ExecutableItemProps, ExpandableItemProps } from '../../../types/types';
 
 export interface PopupCallbackInputs {

@@ -23,8 +23,8 @@ export class SubMenuItemComponent {
   elementRef = inject(ElementRef);
 
   menuItem = this.menuItemData.menuItem as SubMenuItemProps;
-  parentMenu = this.menuItemData.subMenuParent;
-  parentStateMachine = this.parentMenu.stateMachine;
+  ownerMenuCmp = this.menuItemData.ownerMenuCmp;
+  parentStateMachine = this.ownerMenuCmp.stateMachine;
 
   vm$ = combineLatest([
     this.parentStateMachine.highlightedItemId$,
@@ -32,7 +32,7 @@ export class SubMenuItemComponent {
     this.menuItem.visible,
   ]).pipe(
     map(([highlightedItemId, disabled, visible]) => {
-      const menuOptions = this.parentMenu.menuProps.options;
+      const menuOptions = this.ownerMenuCmp.menuProps.options;
       return {
         color: disabled
           ? menuOptions.disabledItemTextColor

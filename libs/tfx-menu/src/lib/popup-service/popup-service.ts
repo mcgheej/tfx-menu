@@ -8,8 +8,9 @@ import {
   inject,
 } from '@angular/core';
 import { SubMenuComponent } from '../menu-components/sub-menu/sub-menu.component';
+import { MenuParent } from '../types/menu-parent.type';
 import { PopupComponentOptions } from '../types/popup-component-options.type';
-import { MenuParent, SubMenuData } from '../types/token.types';
+import { SubMenuData } from '../types/token.types';
 import { SUB_MENU_DATA } from '../types/tokens';
 import { ExecutableItemProps, SubMenuProps } from '../types/types';
 import { PopupRef } from './popup-ref';

@@ -22,8 +22,8 @@ export class CheckboxItemComponent {
   elementRef = inject(ElementRef);
 
   menuItem = this.menuItemData.menuItem as CheckboxItemProps;
-  parentMenu = this.menuItemData.subMenuParent;
-  parentStateMachine = this.parentMenu.stateMachine;
+  ownerMenuCmp = this.menuItemData.ownerMenuCmp;
+  parentStateMachine = this.ownerMenuCmp.stateMachine;
 
   vm$ = combineLatest([
     this.parentStateMachine.highlightedItemId$,
@@ -32,7 +32,7 @@ export class CheckboxItemComponent {
     this.menuItem.checked,
   ]).pipe(
     map(([highlightedItemId, disabled, visible, checked]) => {
-      const menuOptions = this.parentMenu.menuProps.options;
+      const menuOptions = this.ownerMenuCmp.menuProps.options;
       return {
         disabled,
         color: disabled
@@ -51,7 +51,7 @@ export class CheckboxItemComponent {
 
   itemClick(disabled: boolean) {
     if (!disabled) {
-      this.parentMenu.onExecuteCommand(this.menuItem);
+      this.ownerMenuCmp.onExecuteCommand(this.menuItem);
     }
   }
 }

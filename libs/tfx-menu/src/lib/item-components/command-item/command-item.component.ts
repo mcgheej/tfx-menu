@@ -22,8 +22,8 @@ export class CommandItemComponent {
   elementRef = inject(ElementRef);
 
   menuItem = this.menuItemData.menuItem as CommandItemProps;
-  parentMenu = this.menuItemData.subMenuParent;
-  parentStateMachine = this.parentMenu.stateMachine;
+  ownerMenuCmp = this.menuItemData.ownerMenuCmp;
+  parentStateMachine = this.ownerMenuCmp.stateMachine;
 
   vm$ = combineLatest([
     this.parentStateMachine.highlightedItemId$,
@@ -31,7 +31,7 @@ export class CommandItemComponent {
     this.menuItem.visible,
   ]).pipe(
     map(([highlightedItemId, disabled, visible]) => {
-      const menuOptions = this.parentMenu.menuProps.options;
+      const menuOptions = this.ownerMenuCmp.menuProps.options;
       return {
         disabled,
         color: disabled
@@ -49,7 +49,7 @@ export class CommandItemComponent {
 
   itemClick(disabled: boolean) {
     if (!disabled) {
-      this.parentMenu.onExecuteCommand(this.menuItem);
+      this.ownerMenuCmp.onExecuteCommand(this.menuItem);
     }
   }
 }

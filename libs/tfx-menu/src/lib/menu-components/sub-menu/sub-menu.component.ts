@@ -77,7 +77,7 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
           provide: MENU_ITEM_DATA,
           useValue: {
             menuItem: item,
-            subMenuParent: this,
+            ownerMenuCmp: this,
           } as MenuItemData,
         },
       ],
@@ -98,6 +98,11 @@ export class SubMenuComponent implements OnInit, OnDestroy, AfterViewInit {
     return SubMenuItemComponent;
   }
 
+  /**
+   * Called when the user moves the pointer into the sub-menu. The
+   * handler notifies the menu parent this has occured by calling
+   * the MenuParent interface method onEnterChildSubMenu.
+   */
   onEnterSubMenu() {
     this.parentMenu.onEnterChildSubMenu();
   }

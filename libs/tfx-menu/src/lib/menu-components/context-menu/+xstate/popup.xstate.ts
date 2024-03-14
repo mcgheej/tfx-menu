@@ -3,7 +3,7 @@ import { AnyEventObject, fromCallback } from 'xstate';
 import { PopupRef } from '../../../popup-service/popup-ref';
 import { PopupService } from '../../../popup-service/popup-service';
 import { ContextPopupConfig } from '../../../types/context-popup-config.type';
-import { MenuParent } from '../../../types/token.types';
+import { MenuParent } from '../../../types/menu-parent.type';
 import {
   ContextMenuProps,
   ExecutableItemProps,
