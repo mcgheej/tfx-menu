@@ -1,8 +1,6 @@
-import { AppMenuComponent } from '../menu-components/app-menu/app-menu.component';
-import { ContextMenuService } from '../menu-components/context-menu/context-menu.service';
-import { SubMenuComponent } from '../menu-components/sub-menu/sub-menu.component';
+import { ExecutableItemProps } from './types';
 
-export type MenuParent =
-  | AppMenuComponent
-  | SubMenuComponent
-  | ContextMenuService;
+export interface MenuParent {
+  onEnterChildSubMenu: () => void;
+  onExecuteCommand: (item: ExecutableItemProps) => void;
+}
