@@ -45,7 +45,22 @@ export class AppMenuComponent
 
   stateMachine = inject(AppMenuStateMachineService);
 
+  /**
+   * Track the current id for the active item. This is used
+   * as an input to the top level menu item components.
+   */
   activeItemId$ = this.stateMachine.activeItemId$;
+
+  /**
+   * Track whether or not a top level item sub-menu is visible. This
+   * is used in the template to set the app-menu z-index to give the
+   * desired behaviour, specifically if a sub-menu is visible then the
+   * z-index need to be raised to be over the sub-menu backdrop to
+   * keep the top level items accessible to the user, otherwise the
+   * z-index is lowered so that other popup UI elements can sit above
+   * the app menu in the display order.
+   */
+  expandedItem$ = this.stateMachine.expandedItem$;
 
   private itemComponentsSubscription: Subscription | null = null;
 

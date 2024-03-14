@@ -55,7 +55,6 @@ const openMenu = (
   if (menuRef) {
     closeMenu(menuRef);
   }
-  // TODO - positions will be different for sub-menu parents
   return popupService.openSubMenu(item.subMenu, menuParent, {
     hasBackdrop: false,
     associatedElement: anchorEl,
