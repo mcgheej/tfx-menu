@@ -42,7 +42,7 @@ export class PopupService {
     const menuConfig = { ...DEFAULT_CONFIG, ...config };
     const overlayRef = this.createOverlay(menuConfig);
     const menuRef = new PopupRef<ExecutableItemProps>(overlayRef);
-    this.attachSubMenuContainer(overlayRef, subMenu, menuParent, menuRef);
+    this.attachSubMenuContainer(overlayRef, subMenu, menuParent);
 
     overlayRef.backdropClick().subscribe(() => {
       if (menuConfig.backdropClick) {
@@ -62,10 +62,9 @@ export class PopupService {
   private attachSubMenuContainer(
     overlayRef: OverlayRef,
     subMenu: SubMenuProps,
-    menuParent: MenuParent,
-    popupRef: PopupRef<ExecutableItemProps>
+    menuParent: MenuParent
   ): SubMenuComponent {
-    const injector = this.createInjector(subMenu, menuParent, popupRef);
+    const injector = this.createInjector(subMenu, menuParent);
     const containerPortal = new ComponentPortal(
       SubMenuComponent,
       null,
@@ -98,13 +97,12 @@ export class PopupService {
 
   private createInjector(
     subMenu: SubMenuProps,
-    menuParent: MenuParent,
-    menuRef: PopupRef<ExecutableItemProps>
+    menuParent: MenuParent
   ): Injector {
     return Injector.create({
       parent: this.injector,
       providers: [
-        { provide: PopupRef, useValue: menuRef },
+        // { provide: PopupRef, useValue: menuRef },
         {
           provide: SUB_MENU_DATA,
           useValue: {
